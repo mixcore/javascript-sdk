@@ -1,0 +1,104 @@
+
+/**
+ * CommonService: Framework-agnostic utility for Mixcore SDK
+ * All SPA/Angular dependencies removed. Configuration must be injected.
+ *
+ * TODO: Implement actual logic and types for each method.
+ */
+export interface CommonServiceConfig {
+  apiBaseUrl: string;
+  getApiResult: (req: any) => Promise<any>;
+  getRestApiResult: (req: any, ...args: any[]) => Promise<any>;
+  getAnonymousApiResult: (req: any) => Promise<any>;
+  localStorage?: Storage;
+}
+
+export class CommonService {
+  private config: CommonServiceConfig;
+
+  constructor(config: CommonServiceConfig) {
+    this.config = config;
+  }
+
+  async loadJArrayData(name: string): Promise<any> {
+    // TODO: Implement using config.getAnonymousApiResult
+    return this.config.getAnonymousApiResult({
+      method: 'GET',
+      url: `/portal/jarray-data/${name}`
+    });
+  }
+
+  async stopApplication(): Promise<any> {
+    // TODO: Implement using config.getRestApiResult
+    return this.config.getRestApiResult({
+      method: 'GET',
+      url: '/rest/shared/stop-application'
+    }, false, true);
+  }
+
+  async clearCache(): Promise<any> {
+    // TODO: Implement using config.getRestApiResult
+    return this.config.getRestApiResult({
+      method: 'GET',
+      url: '/rest/shared/clear-cache'
+    }, false, true);
+  }
+
+  async loadJsonData(name: string): Promise<any> {
+    // TODO: Implement using config.getAnonymousApiResult
+    return this.config.getAnonymousApiResult({
+      method: 'GET',
+      url: `/portal/json-data/${name}`
+    });
+  }
+
+  async showAlertMsg(title: string, message: string): Promise<void> {
+    // TODO: Implement a framework-agnostic alert (or leave for consumer to implement)
+    // Example: throw new Error(`${title}: ${message}`);
+    // Or: this.config.onAlert?.(title, message);
+  }
+
+  checkFile(fileName: string, validExts: string[]): boolean {
+    // Simple file extension check
+    const ext = fileName.substring(fileName.lastIndexOf('.'));
+    return validExts.includes(ext);
+  }
+
+  async sendMail(subject: string, body: string): Promise<any> {
+    // TODO: Implement using config.getApiResult
+    return this.config.getApiResult({
+      method: 'POST',
+      url: '/portal/sendmail',
+      data: { subject, body }
+    });
+  }
+
+  async getAllSettings(culture?: string): Promise<any> {
+    // TODO: Implement using config.getRestApiResult
+    let url = '/rest/shared';
+    if (culture) url += `/${culture}`;
+    url += '/get-shared-settings';
+    return this.config.getRestApiResult({
+      method: 'GET',
+      url
+    }, false, true);
+  }
+
+  async genrateSitemap(): Promise<any> {
+    // TODO: Implement using config.getApiResult
+    return this.config.getApiResult({
+      method: 'GET',
+      url: '/portal/sitemap'
+    });
+  }
+
+  async getPermissions(): Promise<any> {
+    // TODO: Implement using config.getRestApiResult
+    return this.config.getRestApiResult({
+      method: 'GET',
+      url: '/rest/shared/permissions'
+    });
+  }
+
+  // Add more methods as needed from legacy CommonService
+}

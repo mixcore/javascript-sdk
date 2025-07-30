@@ -1,0 +1,9 @@
+{
+  "name": "@mixcore/apis",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": "https://github.com/mixcore/javascript-sdk"
+}

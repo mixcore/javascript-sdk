@@ -1,0 +1,27 @@
+{
+  "name": "@mixcore/javascript-sdk",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Modular, framework-agnostic SDK for Mixcore projects (shared, base, apis)",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build --stream",
+    "test": "lerna run test --stream",
+    "lint": "lerna run lint --stream"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "jest": "^30.0.5",
+    "lerna": "^7.0.0",
+    "ts-jest": "^29.4.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": "https://github.com/mixcore/javascript-sdk",
+  "packageManager": "pnpm@8.10.0"
+}
