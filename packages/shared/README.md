@@ -66,6 +66,29 @@ console.log(DEFAULT_CONFIG.apiBaseUrl);
 | `SUPPORTED_LOCALES` | Available languages |
 | `FILE_TYPES` | Supported file formats |
 
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using shared utilities in React
+import { formatCurrency, encryptData } from '@mixcore/shared';
+
+function ProductCard({ price }) {
+  const formattedPrice = formatCurrency(price, 'USD');
+  const encryptedId = encryptData(product.id, process.env.REACT_APP_ENCRYPT_KEY);
+
+  return (
+    <div>
+      <p>Price: {formattedPrice}</p>
+      <p>ID: {encryptedId}</p>
+    </div>
+  );
+}
+```
+
 ## Related Packages
 
 - [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client using these utilities
