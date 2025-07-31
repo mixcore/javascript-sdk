@@ -59,7 +59,7 @@ mixcore/javascript-sdk/
 
 ### Extraction & Refactoring Requirements
 
-- Audit and extract all shared, base, and API code from `.legacy` (legacy portal) into the correct domain-driven package.
+- Audit and extract all shared, base, and API code from `/.legacy` (legacy portal) into the correct domain-driven package.
 - Exclude all SPA/UI-coupled logic (routing, DOM, framework state, etc.).
 - Refactor all imports/exports to use package-relative paths.
 - Remove or abstract any SPA-coupled dependencies (e.g., window, document, SPA-specific stores).

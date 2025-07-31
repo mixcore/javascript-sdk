@@ -2,9 +2,27 @@
 /**
  * CommonService: Framework-agnostic utility for Mixcore SDK
  * All SPA/Angular dependencies removed. Configuration must be injected.
- *
- * TODO: Implement actual logic and types for each method.
  */
+
+interface ApiResponse {
+  isSucceed: boolean;
+  data?: any;
+  message?: string;
+}
+
+interface SharedSettings {
+  [key: string]: any;
+  culture?: string;
+}
+
+interface SitemapResult {
+  urls: string[];
+  generatedAt: string;
+}
+
+interface PermissionSet {
+  [permission: string]: boolean;
+}
 export interface CommonServiceConfig {
   apiBaseUrl: string;
   getApiResult: (req: any) => Promise<any>;
@@ -63,8 +81,13 @@ export class CommonService {
     return validExts.includes(ext);
   }
 
-  async sendMail(subject: string, body: string): Promise<any> {
-    // TODO: Implement using config.getApiResult
+  /**
+   * Sends an email using the configured API endpoint
+   * @param subject - Email subject
+   * @param body - Email body content
+   * @returns Promise with API response
+   */
+  async sendMail(subject: string, body: string): Promise<ApiResponse> {
     return this.config.getApiResult({
       method: 'POST',
       url: '/portal/sendmail',
@@ -72,8 +95,12 @@ export class CommonService {
     });
   }
 
-  async getAllSettings(culture?: string): Promise<any> {
-    // TODO: Implement using config.getRestApiResult
+  /**
+   * Gets all shared settings, optionally filtered by culture
+   * @param culture - Optional culture code to filter settings
+   * @returns Promise with settings data
+   */
+  async getAllSettings(culture?: string): Promise<SharedSettings> {
     let url = '/rest/shared';
     if (culture) url += `/${culture}`;
     url += '/get-shared-settings';
@@ -83,16 +110,22 @@ export class CommonService {
     }, false, true);
   }
 
-  async genrateSitemap(): Promise<any> {
-    // TODO: Implement using config.getApiResult
+  /**
+   * Generates a sitemap using the portal API
+   * @returns Promise with sitemap generation result
+   */
+  async generateSitemap(): Promise<SitemapResult> {
     return this.config.getApiResult({
       method: 'GET',
       url: '/portal/sitemap'
     });
   }
 
-  async getPermissions(): Promise<any> {
-    // TODO: Implement using config.getRestApiResult
+  /**
+   * Gets user permissions from the API
+   * @returns Promise with permissions data
+   */
+  async getPermissions(): Promise<PermissionSet> {
     return this.config.getRestApiResult({
       method: 'GET',
       url: '/rest/shared/permissions'
