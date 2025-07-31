@@ -1,5 +1,5 @@
-import { ApiService } from './api-services';
-import { ModuleDataRestMvcService } from './module-data-rest-mvc-service';
+import { ApiService } from '@mixcore/api';
+import { ModuleDataRestMvcService } from '../src/module-data-rest-mvc-service';
 
 describe('ModuleDataRestMvcService', () => {
   let api: ApiService;

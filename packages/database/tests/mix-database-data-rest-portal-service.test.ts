@@ -1,5 +1,5 @@
-import { ApiService } from './api-services';
-import { MixDatabaseDataRestPortalService } from './mix-database-data-rest-portal-service';
+import { ApiService } from '@mixcore/api';
+import { MixDatabaseDataRestPortalService } from '../src/mix-database-data-rest-portal-service';
 
 describe('MixDatabaseDataRestPortalService', () => {
   let api: ApiService;
@@ -35,8 +35,10 @@ describe('MixDatabaseDataRestPortalService', () => {
     expect(api.get).toHaveBeenCalledWith('/mix-database-data/portal/additional-data');
   });
 
-  it('should throw if no mixDatabaseName for initData', async () => {
-    await expect(portalService.initData('')).rejects.toThrow('Missing mixDatabaseName');
+  it('should return error if no mixDatabaseName for initData', async () => {
+    const result = await portalService.initData('');
+    expect(result.isSucceed).toBe(false);
+    expect(result.errors).toContain('Missing mixDatabaseName');
   });
 
   it('should call initData', async () => {
@@ -60,24 +62,31 @@ describe('MixDatabaseDataRestPortalService', () => {
     expect(api.get).toHaveBeenCalledWith('/mix-database-data/portal/export');
   });
 
-  it('should throw if no mixDatabaseName for import', async () => {
-    await expect(portalService.import('', new File([''], 'test.txt'))).rejects.toThrow('Missing mixDatabaseName');
+  it('should return error if no mixDatabaseName for import', async () => {
+    const result = await portalService.import('', new File([''], 'test.txt'));
+    expect(result.isSucceed).toBe(false);
+    expect(result.errors).toContain('Missing mixDatabaseName');
   });
 
-  it('should throw if no file for import', async () => {
-    await expect(portalService.import('testdb', null as any)).rejects.toThrow('Missing file');
+  it('should return error if no file for import', async () => {
+    const result = await portalService.import('testdb', null as any);
+    expect(result.isSucceed).toBe(false);
+    expect(result.errors).toContain('Missing file');
   });
 
   it('should call import', async () => {
     const fakeFile = new File(['test'], 'test.txt', { type: 'text/plain' });
     globalThis.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => ({ imported: true }) });
     const result = await portalService.import('testdb', fakeFile);
-    expect(result).toEqual({ imported: true });
+    expect(result.data).toEqual({ imported: true });
+    expect(result.isSucceed).toBe(true);
     expect(globalThis.fetch).toHaveBeenCalled();
   });
 
-  it('should throw if no mixDatabaseId for migrate', async () => {
-    await expect(portalService.migrate('')).rejects.toThrow('Missing mixDatabaseId');
+  it('should return error if no mixDatabaseId for migrate', async () => {
+    const result = await portalService.migrate('');
+    expect(result.isSucceed).toBe(false);
+    expect(result.errors).toContain('Missing mixDatabaseId');
   });
 
   it('should call migrate', async () => {

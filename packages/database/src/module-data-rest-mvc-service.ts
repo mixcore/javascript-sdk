@@ -24,7 +24,7 @@ export class ModuleDataRestMvcService {
    */
   async initForm(moduleId: string): Promise<ApiResult> {
     if (!moduleId) {
-      return { isSucceed: false, errors: ['Missing moduleId'] };
+      throw new Error('Missing moduleId');
     }
     const endpoint = `${this.prefixUrl}/init-form/${moduleId}`;
     return this.api.get(endpoint);

@@ -68,23 +68,15 @@ export class MixDatabaseDataRestPortalService {
       return { isSucceed: false, errors: ['Missing file'] };
     }
     const endpoint = `${this.prefixUrl}/import-data/${mixDatabaseName}`;
+    if (!mixDatabaseName) {
+      return { isSucceed: false, errors: ['Missing mixDatabaseName'] };
+    }
+    if (!file) {
+      return { isSucceed: false, errors: ['Missing file'] };
+    }
     const formData = new FormData();
     formData.append('file', file);
-    const url = new URL(endpoint, this.api['config'].apiBaseUrl).toString();
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        body: formData,
-        headers: this.api['config'].apiKey ? { 'Authorization': `Bearer ${this.api['config'].apiKey}` } : undefined,
-      });
-      const data = await res.json().catch(() => undefined);
-      if (!res.ok) {
-        return { isSucceed: false, data, errors: [res.statusText], status: res.status };
-      }
-      return { isSucceed: true, data, status: res.status };
-    } catch (err) {
-      return { isSucceed: false, errors: [(err as Error).message] };
-    }
+    return this.api.post(endpoint, formData, { isFormData: true });
   }
 
   /**

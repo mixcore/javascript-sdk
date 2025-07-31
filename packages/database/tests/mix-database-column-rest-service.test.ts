@@ -1,5 +1,5 @@
-import { ApiService } from './api-services';
-import { MixDatabaseColumnRestService } from './mix-database-column-rest-service';
+import { ApiService } from '@mixcore/api';
+import { MixDatabaseColumnRestService } from '../src/mix-database-column-rest-service';
 
 describe('MixDatabaseColumnRestService', () => {
   let api: ApiService;
@@ -14,8 +14,10 @@ describe('MixDatabaseColumnRestService', () => {
     expect(columnService).toBeInstanceOf(MixDatabaseColumnRestService);
   });
 
-  it('should throw if no mixDatabaseName provided', async () => {
-    await expect(columnService.initData('')).rejects.toThrow('Missing mixDatabaseName');
+  it('should return error if no mixDatabaseName provided', async () => {
+    const result = await columnService.initData('');
+    expect(result.isSucceed).toBe(false);
+    expect(result.errors).toContain('Missing mixDatabaseName');
   });
 
   it('should call initData', async () => {

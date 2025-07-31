@@ -1,5 +1,5 @@
-import { ApiService } from './api-services';
-import { MixDatabaseDataValueRestService } from './mix-database-data-value-rest-service';
+import { ApiService } from '@mixcore/api';
+import { MixDatabaseDataValueRestService } from '../src/mix-database-data-value-rest-service';
 
 describe('MixDatabaseDataValueRestService', () => {
   let api: ApiService;
