@@ -6,7 +6,7 @@
  * Refactored from legacy AngularJS service. All SPA dependencies removed.
  * Configuration is injected via constructor.
  */
-import type { ApiResult, RestApiResult } from '@mixcore/api';
+import type { ApiResult, RestApiResult, ApiService } from '@mixcore/api';
 import type { CryptoService } from '@mixcore/shared';
 import type { ConfigurationService } from '@mixcore/config';
 
@@ -16,22 +16,16 @@ import type { ConfigurationService } from '@mixcore/config';
  * @public
  */
 export interface AuthServiceConfig {
-  /** Base URL for API requests */
-  apiBaseUrl: string;
-  /** Optional API key for authentication */
-  apiKey?: string;
+  /** ApiService instance for making API calls */
+  apiService: ApiService;
   /** AES encryption function from shared domain */
-  encryptAES: CryptoService['encryptAES'];
+  encryptAES?: CryptoService['encryptAES'];
   /** Update authentication data in storage (shared/config) */
-  updateAuthData: (data: any) => void;
+  updateAuthData?: (data: any) => void;
   /** Fill authentication data from storage (shared/config) */
-  fillAuthData: () => Promise<any>;
+  fillAuthData?: () => Promise<any>;
   /** Initialize all settings after login (config) */
   initAllSettings: () => Promise<void>;
-  /** Generic API result fetcher (api domain) */
-  getApiResult: (req: any) => Promise<ApiResult>;
-  /** REST API result fetcher (api domain) */
-  getRestApiResult: (req: any, ...args: any[]) => Promise<RestApiResult>;
   /** Optional localStorage implementation (shared) */
   localStorage?: Storage;
   /** Optional plugin hooks for extensibility */
@@ -78,11 +72,7 @@ export class AuthService {
    */
   async saveRegistration(registration: Record<string, any>): Promise<ApiResult> {
     try {
-      return await this.config.getApiResult({
-        method: 'POST',
-        url: '/account/register',
-        data: registration,
-      });
+      return await this.config.apiService.post('/account/register', registration);
     } catch (err) {
       throw new Error('Registration failed: ' + (err as Error).message);
     }
@@ -97,11 +87,8 @@ export class AuthService {
    */
   async forgotPassword(data: Record<string, any>): Promise<RestApiResult> {
     try {
-      return await this.config.getRestApiResult({
-        method: 'POST',
-        url: '/account/forgot-password',
-        data: JSON.stringify(data),
-      });
+      const result = await this.config.apiService.post('/account/forgot-password', data);
+      return result as RestApiResult;
     } catch (err) {
       throw new Error('Forgot password failed: ' + (err as Error).message);
     }
@@ -116,11 +103,8 @@ export class AuthService {
    */
   async resetPassword(data: Record<string, any>): Promise<RestApiResult> {
     try {
-      return await this.config.getRestApiResult({
-        method: 'POST',
-        url: '/account/reset-password',
-        data: JSON.stringify(data),
-      });
+      const result = await this.config.apiService.post('/account/reset-password', data);
+      return result as RestApiResult;
     } catch (err) {
       throw new Error('Reset password failed: ' + (err as Error).message);
     }
@@ -144,6 +128,12 @@ export class AuthService {
     });
   }
 
+  /**
+   * Unsecure login (framework-agnostic, legacy-compatible)
+   * Only requires: getRestApiResult, updateAuthData, initAllSettings, plugins (optional)
+   * @param loginData Login credentials (email, userName, phoneNumber, password, rememberMe, returnUrl)
+   * @returns RestApiResult
+   */
   async loginUnsecure(loginData: {
     email: string;
     userName: string;
@@ -152,23 +142,33 @@ export class AuthService {
     rememberMe: boolean;
     returnUrl: string;
   }): Promise<RestApiResult> {
-    const req = {
-      method: 'POST',
-      url: '/api/v2/rest/auth/user/login-unsecure',
-      data: JSON.stringify(loginData),
-    };
-    const resp = await this.config.getRestApiResult(req, true);
-    if (resp.isSucceed) {
-      this.config.updateAuthData(resp.data);
-      await this.config.initAllSettings();
-      // Plugin hook
-      if (this.config.plugins) {
-        for (const plugin of this.config.plugins) {
-          if (plugin.onLoginSuccess) await plugin.onLoginSuccess(resp);
+    // Legacy-compatible: always POST, expects JSON, handles errors gracefully
+    try {
+      const resp = await this.config.apiService.post(
+        '/api/v2/rest/auth/user/login-unsecure',
+        loginData
+      ) as RestApiResult;
+
+      if (resp && resp.isSucceed) {
+        // Patch/normalize response if needed (legacy: resp.data)
+        this.config.updateAuthData(resp.data);
+        await this.config.initAllSettings();
+        // Plugin hook
+        if (this.config.plugins) {
+          for (const plugin of this.config.plugins) {
+            if (plugin.onLoginSuccess) await plugin.onLoginSuccess(resp);
+          }
         }
       }
+      return resp;
+    } catch (err) {
+      // Legacy: error normalization
+      return {
+        isSucceed: false,
+        errors: [(err as Error).message],
+        data: null
+      } as RestApiResult;
     }
-    return resp;
   }
 
   /**
@@ -187,12 +187,10 @@ export class AuthService {
       externalAccessToken: loginData.accessToken,
     };
     const message = this.config.encryptAES(JSON.stringify(data));
-    const req = {
-      method: 'POST',
-      url: '/account/external-login',
-      data: JSON.stringify({ message }),
-    };
-    const resp = await this.config.getRestApiResult(req, true);
+    const resp = await this.config.apiService.post(
+      '/account/external-login',
+      { message }
+    ) as RestApiResult;
     if (resp.isSucceed) {
       this.config.updateAuthData(resp.data);
       await this.config.initAllSettings();
@@ -250,12 +248,10 @@ export class AuthService {
    */
   async refreshToken(id: string, accessToken: string): Promise<ApiResult | void> {
     if (!id) return this.logOut();
-    const req = {
-      method: 'POST',
-      url: '/account/refresh-token',
-      data: JSON.stringify({ refreshToken: id, accessToken }),
-    };
-    const resp = await this.config.getApiResult(req);
+    const resp = await this.config.apiService.post(
+      '/account/refresh-token',
+      { refreshToken: id, accessToken }
+    );
     if (resp.isSucceed) {
       return this.config.updateAuthData(resp.data);
     } else {
@@ -273,39 +269,22 @@ export class AuthService {
   }
 
   async getRoles(): Promise<ApiResult> {
-    return this.config.getApiResult({
-      method: 'GET',
-      url: '/api/v2/rest/auth/role'
-    });
+    return this.config.apiService.get('/api/v2/rest/auth/role');
   }
 
   async createRole(data: {description: string}): Promise<ApiResult> {
-    return this.config.getApiResult({
-      method: 'POST',
-      url: '/api/v2/rest/auth/role/create',
-      data
-    });
+    return this.config.apiService.post('/api/v2/rest/auth/role/create', data);
   }
 
   async updateRole(id: string, data: {description: string}): Promise<ApiResult> {
-    return this.config.getApiResult({
-      method: 'PUT',
-      url: `/api/v2/rest/auth/role/${id}`,
-      data
-    });
+    return this.config.apiService.post(`/api/v2/rest/auth/role/${id}`, data);
   }
 
   async deleteRole(id: string): Promise<ApiResult> {
-    return this.config.getApiResult({
-      method: 'DELETE',
-      url: `/api/v2/rest/auth/role/${id}`
-    });
+    return this.config.apiService.delete(`/api/v2/rest/auth/role/${id}`);
   }
 
   async getDefaultRole(): Promise<ApiResult> {
-    return this.config.getApiResult({
-      method: 'GET',
-      url: '/api/v2/rest/auth/role/default'
-    });
+    return this.config.apiService.get('/api/v2/rest/auth/role/default');
   }
 }
