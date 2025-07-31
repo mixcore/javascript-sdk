@@ -49,6 +49,8 @@ console.log(DEFAULT_CONFIG.apiBaseUrl);
 
 ## API Reference
 
+All utilities and helper functions include comprehensive TSDoc/JSDoc documentation and auto-generated TypeScript declarations.
+
 ### Utility Functions
 
 | Function | Description |
