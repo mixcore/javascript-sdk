@@ -110,6 +110,77 @@ Test coverage reports are generated in `coverage/` directory.
 
 Contributions welcome! Please see our [Contribution Guidelines](CONTRIBUTING.md).
 
+## Framework Integration
+
+The SDK is framework-agnostic but here are guidelines for popular frameworks:
+
+### React
+
+```typescript
+// Create a context/provider for the SDK
+import { createContext } from 'react';
+import { createMixcoreSdk } from '@mixcore/api';
+
+const SdkContext = createContext(null);
+
+function App() {
+  const sdk = createMixcoreSdk(
+    { apiBaseUrl: process.env.REACT_APP_API_URL },
+    { /* services */ }
+  );
+
+  return (
+    <SdkContext.Provider value={sdk}>
+      {/* Your app */}
+    </SdkContext.Provider>
+  );
+}
+```
+
+### Vue
+
+```typescript
+// Provide SDK instance via Vue's provide/inject
+import { createApp } from 'vue';
+import { createMixcoreSdk } from '@mixcore/api';
+
+const app = createApp(App);
+
+app.provide('mixcoreSdk', createMixcoreSdk(
+  { apiBaseUrl: import.meta.env.VITE_API_URL },
+  { /* services */ }
+));
+```
+
+### Angular
+
+```typescript
+// Create an injectable service wrapper
+import { Injectable } from '@angular/core';
+import { createMixcoreSdk } from '@mixcore/api';
+
+@Injectable({ providedIn: 'root' })
+export class MixcoreService {
+  sdk = createMixcoreSdk(
+    { apiBaseUrl: environment.apiUrl },
+    { /* services */ }
+  );
+}
+```
+
+### Svelte/SvelteKit
+
+```typescript
+// Use Svelte stores for SDK instance
+import { writable } from 'svelte/store';
+import { createMixcoreSdk } from '@mixcore/api';
+
+export const sdk = writable(createMixcoreSdk(
+  { apiBaseUrl: import.meta.env.VITE_API_URL },
+  { /* services */ }
+));
+```
+
 ## License
 
 Mixcore Community License (MCL). See [LICENSE](LICENSE) for details.

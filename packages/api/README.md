@@ -81,6 +81,27 @@ Test coverage reports are generated in `coverage/` directory when running:
 pnpm test
 ```
 
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with React
+import { createMixcoreSdk } from '@mixcore/api';
+
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: process.env.REACT_APP_API_URL },
+  {
+    api: new ApiService({
+      apiBaseUrl: process.env.REACT_APP_API_URL,
+      apiKey: process.env.REACT_APP_API_KEY
+    })
+  }
+);
+```
+
 ## Related Packages
 
 - [@mixcore/database](https://github.com/mixcore/javascript-sdk/tree/main/packages/database): Database services using this API client

@@ -74,6 +74,30 @@ See test files in `tests/` directory for implementation details.
 
 ## Related Packages
 
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with Angular
+import { Injectable } from '@angular/core';
+import { BaseRestService } from '@mixcore/base';
+
+@Injectable({ providedIn: 'root' })
+export class MyRestService extends BaseRestService {
+  constructor() {
+    super({
+      apiBaseUrl: environment.apiUrl,
+      apiKey: environment.apiKey
+    });
+  }
+}
+```
+
+## Related Packages
+
 - [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client implementation
 - [@mixcore/database](https://github.com/mixcore/javascript-sdk/tree/main/packages/database): Database services extending these base classes
 

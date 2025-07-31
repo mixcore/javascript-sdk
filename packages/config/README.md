@@ -76,6 +76,27 @@ See test files in `tests/` directory for implementation details.
 
 ## Related Packages
 
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with SvelteKit
+import { ConfigurationServices } from '@mixcore/config';
+
+const configService = new ConfigurationServices();
+
+// Load config in Svelte component
+$: config = configService.loadConfiguration({
+  apiBaseUrl: import.meta.env.VITE_API_URL,
+  apiKey: import.meta.env.VITE_API_KEY
+});
+```
+
+## Related Packages
+
 - [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client using this config
 - [@mixcore/base](https://github.com/mixcore/javascript-sdk/tree/main/packages/base): Base service classes
 

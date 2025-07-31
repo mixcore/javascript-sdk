@@ -69,6 +69,30 @@ pnpm test
 
 See individual test files in `tests/` directory for implementation details.
 
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with Vue
+import { createMixcoreSdk } from '@mixcore/api';
+import { ModuleDataService } from '@mixcore/database';
+
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: import.meta.env.VITE_API_URL },
+  {
+    database: new ModuleDataService({
+      api: new ApiService({
+        apiBaseUrl: import.meta.env.VITE_API_URL,
+        apiKey: import.meta.env.VITE_API_KEY
+      })
+    })
+  }
+);
+```
+
 ## Related Packages
 
 - [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client foundation

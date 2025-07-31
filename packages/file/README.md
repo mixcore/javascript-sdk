@@ -68,6 +68,30 @@ pnpm test
 
 See test files in `tests/` directory for implementation details.
 
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with Vue
+import { FileServices } from '@mixcore/file';
+import { ApiService } from '@mixcore/api';
+
+const fileService = new FileServices({
+  api: new ApiService({
+    apiBaseUrl: import.meta.env.VITE_API_URL,
+    apiKey: import.meta.env.VITE_API_KEY
+  })
+});
+
+// Upload file in Vue component
+const upload = async (file) => {
+  await fileService.uploadFile(file);
+};
+```
+
 ## Related Packages
 
 - [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client foundation

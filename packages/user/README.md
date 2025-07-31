@@ -73,6 +73,32 @@ await userService.updateProfile({ name: 'New Name' });
 
 ## Related Packages
 
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with Angular
+import { Injectable } from '@angular/core';
+import { AuthServices } from '@mixcore/user';
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private auth = new AuthServices({
+    apiBaseUrl: environment.apiUrl,
+    apiKey: environment.apiKey
+  });
+
+  login(email: string, password: string) {
+    return this.auth.login(email, password);
+  }
+}
+```
+
+## Related Packages
+
 - [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client foundation
 - [@mixcore/navigation](https://github.com/mixcore/javascript-sdk/tree/main/packages/navigation): Route guards using auth
 
