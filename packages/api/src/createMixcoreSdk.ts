@@ -1,9 +1,9 @@
 // SDK bootstrap entrypoint for Mixcore JavaScript SDK
 // Usage: import { createMixcoreSdk } from '@mixcore/apis';
-import { UserServices } from './user/user-services';
-import { TemplateService } from './template/template-service';
-import { FileServices } from './file/file-services';
-import { ConfigurationServices } from './config/configuration-services';
+import { UserServices } from '@mixcore/user';
+import { TemplateService } from '@mixcore/template';
+import { FileServices } from '@mixcore/file';
+import { ConfigurationServices } from '@mixcore/config';
 // ...import other domain services as needed
 
 export interface MixcoreSdkConfig {

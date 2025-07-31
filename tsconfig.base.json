@@ -13,9 +13,13 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mixcore/api": ["packages/api/src"],
-      "@mixcore/shared": ["packages/shared/src"],
-      "@mixcore/config": ["packages/config/src"]
+      "@mixcore/api": ["packages/api/dist"],
+      "@mixcore/shared": ["packages/shared/dist"],
+      "@mixcore/config": ["packages/config/dist"],
+      "@mixcore/user": ["packages/user/dist"],
+      "@mixcore/template": ["packages/template/dist"],
+      "@mixcore/file": ["packages/file/dist"],
+      "@mixcore/base": ["packages/base/dist"]
     }
   },
   "exclude": ["node_modules", "dist"]
