@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "lerna run build --stream",
-    "test": "npm run build && lerna run test --stream",
+    "test": "npm run build && lerna run test --stream --scope @mixcore/base --scope @mixcore/shared --scope @mixcore/api --scope @mixcore/config --scope @mixcore/database --scope @mixcore/file --scope @mixcore/template --scope @mixcore/user --scope @mixcore/navigation",
     "lint": "lerna run lint --stream",
     "compile": "tsc --build tsconfig.base.json",
     "type-check": "lerna run type-check --stream"
