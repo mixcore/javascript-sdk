@@ -1,0 +1,987 @@
+// packages/api/README.md
+@mixcore/api documentation:
+<<<CONTENT>>>
+# @mixcore/api
+
+API clients and endpoint wrappers for Mixcore SDK. Provides typed HTTP clients for interacting with Mixcore APIs.
+
+## Features
+
+- Typed API client with configurable base URL
+- Automatic request/response serialization
+- Built-in error handling
+- Support for authentication headers
+- Promise-based async operations
+- Secure configuration injection
+- Framework-agnostic implementation
+
+## Installation
+
+```bash
+npm install @mixcore/api
+# or
+pnpm add @mixcore/api
+```
+
+## Usage
+
+### Basic Example
+
+```typescript
+import { ApiService } from '@mixcore/api';
+
+const api = new ApiService({
+  apiBaseUrl: 'https://api.mixcore.net',
+  apiKey: process.env.MIXCORE_API_KEY // Never hardcode secrets!
+});
+
+// Make API requests
+const response = await api.get('/some-endpoint');
+```
+
+### SDK Entrypoint
+
+```typescript
+import { createMixcoreSdk } from '@mixcore/api';
+
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: 'https://api.mixcore.net' },
+  {
+    api: new ApiService({ apiBaseUrl: 'https://api.mixcore.net' })
+  }
+);
+```
+
+### Configuration Options
+
+| Option | Type | Required | Description |
+|--------|------|----------|-------------|
+| apiBaseUrl | string | Yes | Base URL for API requests |
+| apiKey? | string | No | API key for authentication |
+| timeout? | number | No | Request timeout in ms |
+
+### Security Note
+
+- Never hardcode API keys or secrets in your code
+- Always inject configuration at runtime
+- Use environment variables for sensitive values
+
+## API Reference
+
+### ApiService Methods
+
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| get | `endpoint: string`, `params?: Record<string, any>` | `Promise<ApiResult>` | Makes GET request |
+| post | `endpoint: string`, `data: any`, `options?: { isFormData?: boolean }` | `Promise<ApiResult>` | Makes POST request |
+| delete | `endpoint: string` | `Promise<ApiResult>` | Makes DELETE request |
+
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
+```
+
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with React
+import { createMixcoreSdk } from '@mixcore/api';
+
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: process.env.REACT_APP_API_URL },
+  {
+    api: new ApiService({
+      apiBaseUrl: process.env.REACT_APP_API_URL,
+      apiKey: process.env.REACT_APP_API_KEY
+    })
+  }
+);
+```
+
+## Related Packages
+
+- [@mixcore/database](https://github.com/mixcore/javascript-sdk/tree/main/packages/database): Database services using this API client
+- [@mixcore/base](https://github.com/mixcore/javascript-sdk/tree/main/packages/base): Base service classes
+
+## License
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
+<<<END>>>
+
+// packages/base/README.md
+@mixcore/base documentation:
+<<<CONTENT>>>
+# @mixcore/base
+
+Mixcore SDK base abstractions. Provides core TypeScript classes and interfaces for all SDK packages.
+
+## Features
+
+- **BaseService**: Abstract service class with common functionality
+- **BaseRestService**: REST API client base class
+- **Injectable configuration**: Flexible service configuration
+- **Framework-agnostic**: No UI/SPA dependencies
+- **Secure by design**: Configuration injection prevents hardcoded secrets
+
+## Installation
+
+```bash
+npm install @mixcore/base
+# or
+pnpm add @mixcore/base
+```
+
+## Usage
+
+### Extending BaseService
+
+```typescript
+import { BaseService } from '@mixcore/base';
+
+class MyService extends BaseService {
+  constructor(config: MyConfig) {
+    super(config);
+  }
+
+  async getData() {
+    return this.execute(() => {
+      // Your implementation
+    });
+  }
+}
+```
+
+### Security Note
+
+- Never hardcode secrets in configuration
+- Always inject configuration at runtime
+- Use environment variables for sensitive values
+
+## API Reference
+
+### BaseService Methods
+
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| execute | `fn: () => Promise<T>` | `Promise<T>` | Wraps operations with error handling |
+| getConfig | None | `ConfigType` | Returns current configuration |
+
+### BaseRestService Methods
+
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| get | `path: string`, `params?: Record<string, any>` | `Promise<ApiResult>` | Makes GET request |
+| post | `path: string`, `data: any`, `options?: { isFormData?: boolean }` | `Promise<ApiResult>` | Makes POST request |
+| put | `path: string`, `data: any` | `Promise<ApiResult>` | Makes PUT request |
+| delete | `path: string` | `Promise<ApiResult>` | Makes DELETE request |
+
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
+```
+
+See test files in `tests/` directory for implementation details.
+
+## Related Packages
+
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with Angular
+import { Injectable } from '@angular/core';
+import { BaseRestService } from '@mixcore/base';
+
+@Injectable({ providedIn: 'root' })
+export class MyRestService extends BaseRestService {
+  constructor() {
+    super({
+      apiBaseUrl: environment.apiUrl,
+      apiKey: environment.apiKey
+    });
+  }
+}
+```
+
+## Related Packages
+
+- [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client implementation
+- [@mixcore/database](https://github.com/mixcore/javascript-sdk/tree/main/packages/database): Database services extending these base classes
+
+## License
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
+<<<END>>>
+
+// packages/config/README.md
+@mixcore/config documentation:
+<<<CONTENT>>>
+# @mixcore/config
+
+Configuration management services for Mixcore SDK. Provides loading, validation and access to application configuration.
+
+## Features
+
+- Load configuration from multiple sources (files, env vars, etc.)
+- Type-safe configuration access
+- Schema validation
+- Environment variable support
+- Hot-reloading for development
+- Secure by design: Prevents hardcoded secrets
+
+## Installation
+
+```bash
+npm install @mixcore/config
+# or
+pnpm add @mixcore/config
+```
+
+## Usage
+
+### Basic Example
+
+```typescript
+import { ConfigurationServices } from '@mixcore/config';
+
+const configService = new ConfigurationServices();
+
+// Load config from environment variables
+const config = await configService.loadConfiguration({
+  apiBaseUrl: process.env.MIXCORE_API_URL,
+  apiKey: process.env.MIXCORE_API_KEY // Never hardcode secrets!
+});
+
+// Access config values
+console.log(config.apiBaseUrl);
+```
+
+### Security Best Practices
+
+- Never commit configuration files with secrets
+- Use environment variables for sensitive values
+- Validate configuration schema in production
+- Rotate secrets regularly
+
+## Configuration Schema
+
+```typescript
+interface AppConfig {
+  apiBaseUrl: string; // Required
+  apiKey?: string; // Optional
+  debug?: boolean; // Optional
+  // ...other app-specific settings
+}
+```
+
+## API Reference
+
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| loadConfiguration | `config?: Partial<AppConfig>` | `Promise<AppConfig>` | Loads and validates config |
+| getConfig | None | `AppConfig` | Returns current config |
+| watchForChanges | None | `void` | Enables hot-reloading |
+
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
+```
+
+See test files in `tests/` directory for implementation details.
+
+## Related Packages
+
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with SvelteKit
+import { ConfigurationServices } from '@mixcore/config';
+
+const configService = new ConfigurationServices();
+
+// Load config in Svelte component
+$: config = configService.loadConfiguration({
+  apiBaseUrl: import.meta.env.VITE_API_URL,
+  apiKey: import.meta.env.VITE_API_KEY
+});
+```
+
+## Related Packages
+
+- [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client using this config
+- [@mixcore/base](https://github.com/mixcore/javascript-sdk/tree/main/packages/base): Base service classes
+
+## License
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
+<<<END>>>
+
+// packages/database/README.md
+@mixcore/database documentation:
+<<<CONTENT>>>
+# @mixcore/database
+
+Database domain services and types for Mixcore SDK. Provides data access, querying, and persistence services.
+
+## Features
+
+- REST API clients for Mixcore database operations
+- TypeScript interfaces for database models
+- Data validation and transformation
+- Modular service architecture
+- Secure configuration injection
+
+## Installation
+
+```bash
+npm install @mixcore/database
+# or
+pnpm add @mixcore/database
+```
+
+## Usage
+
+### Basic Example
+
+```typescript
+import { createMixcoreSdk } from '@mixcore/api';
+import { ModuleDataService } from '@mixcore/database';
+
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: 'https://api.mixcore.net' },
+  {
+    database: new ModuleDataService({
+      api: new ApiService({
+        apiBaseUrl: 'https://api.mixcore.net',
+        apiKey: process.env.MIXCORE_API_KEY // Never hardcode secrets!
+      })
+    })
+  }
+);
+
+// Fetch data items
+const result = await sdk.database.fetchDataItems('module-id');
+```
+
+### Security Note
+
+- Never hardcode API keys or secrets
+- Always inject configuration at runtime
+- Use environment variables for sensitive values
+
+## API Reference
+
+### ModuleDataService Methods
+
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| fetchDataItems | `moduleId: string`, `options?: FetchOptions` | `Promise<DataItem[]>` | Fetches data items for module |
+| createDataItem | `moduleId: string`, `data: DataItem` | `Promise<DataItem>` | Creates new data item |
+| updateDataItem | `moduleId: string`, `id: string`, `data: Partial<DataItem>` | `Promise<DataItem>` | Updates existing data item |
+| deleteDataItem | `moduleId: string`, `id: string` | `Promise<void>` | Deletes data item |
+
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
+```
+
+See individual test files in `tests/` directory for implementation details.
+
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with Vue
+import { createMixcoreSdk } from '@mixcore/api';
+import { ModuleDataService } from '@mixcore/database';
+
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: import.meta.env.VITE_API_URL },
+  {
+    database: new ModuleDataService({
+      api: new ApiService({
+        apiBaseUrl: import.meta.env.VITE_API_URL,
+        apiKey: import.meta.env.VITE_API_KEY
+      })
+    })
+  }
+);
+```
+
+## Related Packages
+
+- [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client foundation
+- [@mixcore/base](https://github.com/mixcore/javascript-sdk/tree/main/packages/base): Base service classes
+
+## License
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
+<<<END>>>
+
+// packages/file/README.md
+@mixcore/file documentation:
+<<<CONTENT>>>
+# @mixcore/file
+
+File handling utilities for Mixcore SDK. Provides services for file uploads, downloads and management.
+
+## Features
+
+- File upload/download operations
+- File metadata handling
+- Progress tracking
+- TypeScript types for file operations
+- Framework-agnostic implementation
+- Secure configuration injection
+
+## Installation
+
+```bash
+npm install @mixcore/file
+# or
+pnpm add @mixcore/file
+```
+
+## Usage
+
+### Basic Example
+
+```typescript
+import { FileServices } from '@mixcore/file';
+import { ApiService } from '@mixcore/api';
+
+const fileService = new FileServices({
+  api: new ApiService({
+    apiBaseUrl: process.env.MIXCORE_API_URL, // Never hardcode URLs!
+    apiKey: process.env.MIXCORE_API_KEY // Never hardcode secrets!
+  })
+});
+
+// Upload a file
+await fileService.uploadFile(file, {
+  onProgress: (progress) => console.log(`Uploaded ${progress}%`)
+});
+```
+
+### Security Note
+
+- Never hardcode API endpoints or credentials
+- Always inject configuration at runtime
+- Validate file types and sizes before processing
+- Use environment variables for sensitive values
+
+## API Reference
+
+### FileServices Methods
+
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| uploadFile | `file: File`, `options?: UploadOptions` | `Promise<FileUploadResult>` | Uploads file with progress tracking |
+| downloadFile | `id: string` | `Promise<Blob>` | Downloads file by ID |
+| getFileMetadata | `id: string` | `Promise<FileMetadata>` | Gets file metadata |
+| deleteFile | `id: string` | `Promise<void>` | Deletes file |
+
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
+```
+
+See test files in `tests/` directory for implementation details.
+
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with Vue
+import { FileServices } from '@mixcore/file';
+import { ApiService } from '@mixcore/api';
+
+const fileService = new FileServices({
+  api: new ApiService({
+    apiBaseUrl: import.meta.env.VITE_API_URL,
+    apiKey: import.meta.env.VITE_API_KEY
+  })
+});
+
+// Upload file in Vue component
+const upload = async (file) => {
+  await fileService.uploadFile(file);
+};
+```
+
+## Related Packages
+
+- [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client foundation
+- [@mixcore/database](https://github.com/mixcore/javascript-sdk/tree/main/packages/database): Database services
+
+## License
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
+<<<END>>>
+
+// packages/navigation/README.md
+@mixcore/navigation documentation:
+<<<CONTENT>>>
+# @mixcore/navigation
+
+Routing and navigation services for Mixcore SDK. Provides declarative routing and programmatic navigation utilities.
+
+## Features
+
+- Declarative route configuration
+- Programmatic navigation
+- Route guards and permissions
+- Navigation events
+- Framework-agnostic implementation
+
+## Installation
+
+```bash
+npm install @mixcore/navigation
+# or
+pnpm add @mixcore/navigation
+```
+
+## Usage
+
+### Basic Example
+
+```typescript
+import { NavigationService } from '@mixcore/navigation';
+
+const routes = [
+  { path: '/', component: HomePage },
+  { path: '/about', component: AboutPage },
+  { path: '/admin', component: AdminPage, requiresAuth: true }
+];
+
+const navService = new NavigationService({ routes });
+
+// Navigate programmatically
+navService.navigate('/about');
+```
+
+### Route Guards
+
+```typescript
+const routes = [
+  {
+    path: '/admin',
+    component: AdminPage,
+    canActivate: [() => checkAdminPermissions()]
+  }
+];
+```
+
+## API Reference
+
+| Method | Description |
+|--------|-------------|
+| `navigate(path)` | Navigates to specified path |
+| `goBack()` | Navigates back |
+| `getCurrentRoute()` | Returns current route info |
+| `onNavigationStart(cb)` | Navigation event listener |
+
+## Related Packages
+
+- [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client integration
+- [@mixcore/user](https://github.com/mixcore/javascript-sdk/tree/main/packages/user): User/auth services for route guards
+
+## License
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
+<<<END>>>
+
+// packages/shared/README.md
+@mixcore/shared documentation:
+<<<CONTENT>>>
+# @mixcore/shared
+
+Shared utilities and helpers for Mixcore SDK. Provides stateless TypeScript functions, constants and cross-domain helpers.
+
+## Features
+
+- **Utilities**: Common functions for crypto, translation, files, etc.
+- **Constants**: Shared configuration values and defaults
+- **Helpers**: Cross-cutting concerns and utilities
+- **Framework-agnostic**: No UI/SPA dependencies
+- **TypeScript-first**: Full type safety
+
+## Installation
+
+```bash
+npm install @mixcore/shared
+# or
+pnpm add @mixcore/shared
+```
+
+## Usage
+
+### Utility Functions
+
+```typescript
+import {
+  formatCurrency,
+  generateId,
+  encryptData
+} from '@mixcore/shared';
+
+// Format money value
+const formatted = formatCurrency(1234.56, 'USD');
+
+// Generate unique ID
+const id = generateId();
+
+// Encrypt sensitive data
+const encrypted = encryptData('secret', 'my-key');
+```
+
+### Constants
+
+```typescript
+import { DEFAULT_CONFIG } from '@mixcore/shared';
+
+console.log(DEFAULT_CONFIG.apiBaseUrl);
+```
+
+## API Reference
+
+### Utility Functions
+
+| Function | Description |
+|----------|-------------|
+| `formatCurrency()` | Formats money values |
+| `generateId()` | Generates unique IDs |
+| `encryptData()` | Encrypts sensitive data |
+| `translate()` | Localization helper |
+
+### Constants
+
+| Constant | Description |
+|----------|-------------|
+| `DEFAULT_CONFIG` | Default configuration values |
+| `SUPPORTED_LOCALES` | Available languages |
+| `FILE_TYPES` | Supported file formats |
+
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using shared utilities in React
+import { formatCurrency, encryptData } from '@mixcore/shared';
+
+function ProductCard({ price }) {
+  const formattedPrice = formatCurrency(price, 'USD');
+  const encryptedId = encryptData(product.id, process.env.REACT_APP_ENCRYPT_KEY);
+
+  return (
+    <div>
+      <p>Price: {formattedPrice}</p>
+      <p>ID: {encryptedId}</p>
+    </div>
+  );
+}
+```
+
+## Related Packages
+
+- [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client using these utilities
+- [@mixcore/config](https://github.com/mixcore/javascript-sdk/tree/main/packages/config): Configuration management
+
+## License
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
+<<<END>>>
+
+// packages/template/README.md
+@mixcore/template documentation:
+<<<CONTENT>>>
+# @mixcore/template
+
+Template rendering services for Mixcore SDK. Provides utilities for dynamic content generation from templates.
+
+## Features
+
+- Multiple template engines (Handlebars, EJS, etc.)
+- Layout and partial support
+- Custom template helpers
+- Async rendering
+- Framework-agnostic implementation
+
+## Installation
+
+```bash
+npm install @mixcore/template
+# or
+pnpm add @mixcore/template
+```
+
+## Usage
+
+### Basic Example
+
+```typescript
+import { TemplateService } from '@mixcore/template';
+
+const templateService = new TemplateService();
+
+// Render template with data
+const html = await templateService.render('welcome', {
+  name: 'User',
+  date: new Date()
+});
+```
+
+### Custom Helpers
+
+```typescript
+templateService.registerHelper('formatDate', (date) => {
+  return new Intl.DateTimeFormat().format(date);
+});
+```
+
+### Supported Template Types
+
+- Handlebars (.hbs)
+- EJS (.ejs)
+- HTML with embedded expressions
+- Plain text templates
+
+## API Reference
+
+| Method | Description |
+|--------|-------------|
+| `render(template, data)` | Renders template with data |
+| `registerHelper(name, fn)` | Adds custom helper |
+| `getTemplate(name)` | Gets compiled template |
+| `precompile(templates)` | Precompiles for performance |
+
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with SvelteKit
+import { TemplateService } from '@mixcore/template';
+
+const templateService = new TemplateService();
+
+// Render template in Svelte component
+$: rendered = templateService.render('welcome', {
+  name: 'User',
+  date: new Date()
+});
+```
+
+## Related Packages
+
+- [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client integration
+- [@mixcore/file](https://github.com/mixcore/javascript-sdk/tree/main/packages/file): File handling for templates
+
+## License
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
+<<<END>>>
+
+// packages/user/README.md
+@mixcore/user documentation:
+<<<CONTENT>>>
+# @mixcore/user
+
+Authentication and user management services for Mixcore SDK. Provides login, session handling and user profile management.
+
+## Features
+
+- Email/password authentication
+- Social login (Google, Facebook, etc.)
+- Session management
+- User profile CRUD operations
+- Permission checking
+- Framework-agnostic implementation
+
+## Installation
+
+```bash
+npm install @mixcore/user
+# or
+pnpm add @mixcore/user
+```
+
+## Usage
+
+### Basic Authentication
+
+```typescript
+import { AuthServices } from '@mixcore/user';
+
+const authService = new AuthServices();
+
+// Login
+const user = await authService.login('user@example.com', 'password');
+
+// Check session
+const isLoggedIn = await authService.checkSession();
+
+// Logout
+await authService.logout();
+```
+
+### User Management
+
+```typescript
+import { UserServices } from '@mixcore/user';
+
+const userService = new UserServices();
+
+// Get current user
+const profile = await userService.getProfile();
+
+// Update profile
+await userService.updateProfile({ name: 'New Name' });
+```
+
+## API Reference
+
+### AuthServices
+
+| Method | Description |
+|--------|-------------|
+| `login(email, password)` | Authenticates user |
+| `logout()` | Ends session |
+| `checkSession()` | Verifies active session |
+| `register(userData)` | Creates new account |
+
+### UserServices
+
+| Method | Description |
+|--------|-------------|
+| `getProfile()` | Gets user profile |
+| `updateProfile(data)` | Updates profile |
+| `hasPermission(perm)` | Checks permission |
+
+## Related Packages
+
+## Framework Integration
+
+This package works with all JavaScript frameworks. See the [main README](../../README.md#framework-integration) for framework-specific integration examples.
+
+### Package-specific Usage
+
+```typescript
+// Example: Using with Angular
+import { Injectable } from '@angular/core';
+import { AuthServices } from '@mixcore/user';
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private auth = new AuthServices({
+    apiBaseUrl: environment.apiUrl,
+    apiKey: environment.apiKey
+  });
+
+  login(email: string, password: string) {
+    return this.auth.login(email, password);
+  }
+}
+```
+
+## Related Packages
+
+- [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client foundation
+- [@mixcore/navigation](https://github.com/mixcore/javascript-sdk/tree/main/packages/navigation): Route guards using auth
+
+## License
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
+<<<END>>>
+
+// README.md
+Root documentation:
+<<<CONTENT>>>
+# Mixcore JavaScript SDK
+
+![Mixcore Logo](https://mixcore.net/images/logo.svg)
+
+Modular, framework-agnostic SDK for Mixcore projects. Built with TypeScript and distributed as ESM/CJS modules.
+
+## Features
+
+- **Modular architecture**: Import only what you need
+- **TypeScript-first**: Full type safety and autocompletion
+- **Framework-agnostic**: Works with any JavaScript framework
+- **Production-ready**: Well-tested and documented
+- **Secure by design**: Configuration injection prevents hardcoded secrets
+- **Extensible**: Plugin/adapter architecture for custom implementations
+
+## Packages
+
+| Package | Description |
+|--------|-------------|
+| [@mixcore/shared](packages/shared) | Shared utilities, helpers and constants |
+| [@mixcore/base](packages/base) | Base classes, abstract models and interfaces |
+| [@mixcore/api](packages/api) | API clients and endpoint wrappers |
+| [@mixcore/config](packages/config) | Configuration management |
+| [@mixcore/database](packages/database) | Database domain services |
+| [@mixcore/file](packages/file) | File handling utilities |
+| [@mixcore/user](packages/user) | User/auth services |
+| [@mixcore/template](packages/template) | Template rendering services |
+
+## Getting Started
+
+### Installation
+
+```bash
+npm install @mixcore/api @mixcore/database # or whichever packages you need
+```
+
+### SDK Initialization
+
+```typescript
+import { createMixcoreSdk } from '@mixcore/api';
+import { ApiService } from '@mixcore/api';
+import { ModuleDataService } from '@mixcore/database';
+
+// Initialize SDK with configuration
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: 'https://api.mixcore.net' },
+  {
+    api: new ApiService({ apiBaseUrl: 'https://api.mixcore.net' }),
+    database: new ModuleDataService({ api: new ApiService({ apiBaseUrl: 'https://api.mixcore.net' }) })
+    // Add other domain
