@@ -4,6 +4,19 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
+  "description": "User domain services and API clients for Mixcore SDK (framework-agnostic, TypeScript)",
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist",
+    "test": "jest",
+    "lint": "eslint src --ext .ts"
+  },
   "license": "SEE LICENSE IN LICENSE",
-  "repository": "https://github.com/mixcore/javascript-sdk"
+  "repository": "https://github.com/mixcore/javascript-sdk",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": ["mixcore", "sdk", "user", "typescript", "framework-agnostic"],
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

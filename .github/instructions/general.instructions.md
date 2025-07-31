@@ -56,6 +56,37 @@ mixcore/javascript-sdk/
 - Provide plugin/adapter interfaces for extensibility.
 - Update migration checklists and documentation as you migrate, refactor, and document each module.
 
+
+### Extraction & Refactoring Requirements
+
+- Audit and extract all shared, base, and API code from `.legacy` (legacy portal) into the correct domain-driven package.
+- Exclude all SPA/UI-coupled logic (routing, DOM, framework state, etc.).
+- Refactor all imports/exports to use package-relative paths.
+- Remove or abstract any SPA-coupled dependencies (e.g., window, document, SPA-specific stores).
+- All configuration (endpoints, tokens, etc.) must be injectable and never hardcoded.
+- Maintain original directory structure for clarity where possible.
+
+### Build, Testing, and Automation
+
+- Build outputs must support both ESM and CJS, and generate TypeScript declarations.
+- All public APIs must have unit and integration tests (Jest or Vitest recommended).
+- Integration/cross-package tests should be placed in `/tests`.
+- CI/CD must lint, type-check, test, and build each package on every commit.
+- Use semantic versioning (per-package or global).
+
+### Documentation
+
+- Each package/module must have a README.md with usage examples.
+- Provide migration/usage guides for teams adopting the SDK.
+- All public APIs, types, and configuration points must have TSDoc/JSDoc comments.
+- API reference should be auto-generated from TypeScript/OpenAPI where possible.
+
+### Security & Compliance
+
+- No secrets or credentials are hardcoded. All sensitive config must be injected at runtime.
+- API clients must sanitize all inputs/outputs and handle errors gracefully.
+- License the SDK under Mixcore Community License (MCL) or compatible OSS license with clear attribution.
+
 ### Success Criteria
 
 - All SDK code is TypeScript, framework-agnostic, and well-documented.
