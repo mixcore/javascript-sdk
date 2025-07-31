@@ -1,4 +1,5 @@
-import { ApiService } from './api-services';
+import type { ApiService } from '@mixcore/api';
+import type { ApiResult } from '@mixcore/api';
 
 /**
  * ModuleDataRestMvcService
@@ -18,8 +19,13 @@ export class ModuleDataRestMvcService {
    * @param moduleId - The module ID
    * @returns API result
    */
-  async initForm(moduleId: string): Promise<any> {
-    if (!moduleId) throw new Error('Missing moduleId');
+  /**
+   * Initializes a form for a module by ID. Returns ApiResult.
+   */
+  async initForm(moduleId: string): Promise<ApiResult> {
+    if (!moduleId) {
+      return { isSucceed: false, errors: ['Missing moduleId'] };
+    }
     const endpoint = `${this.prefixUrl}/init-form/${moduleId}`;
     return this.api.get(endpoint);
   }

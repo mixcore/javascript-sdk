@@ -1,4 +1,5 @@
-import { ApiService } from './api-services';
+import type { ApiService } from '@mixcore/api';
+import type { ApiResult } from '@mixcore/api';
 
 /**
  * MixDatabaseRestPortalService
@@ -18,8 +19,13 @@ export class MixDatabaseRestPortalService {
    * @param data - Migration data (must include id)
    * @returns API result
    */
-  async migrate(data: { id: string; [key: string]: any }): Promise<any> {
-    if (!data.id) throw new Error('Missing id for migration');
+  /**
+   * Triggers a migration for a Mixcore database entity. Returns ApiResult.
+   */
+  async migrate(data: { id: string; [key: string]: any }): Promise<ApiResult> {
+    if (!data.id) {
+      return { isSucceed: false, errors: ['Missing id for migration'] };
+    }
     const endpoint = `${this.prefixUrl}/migrate/${data.id}`;
     return this.api.post(endpoint, data);
   }

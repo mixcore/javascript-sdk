@@ -1,4 +1,4 @@
-import { ApiService } from './api-services';
+import type { ApiService } from '@mixcore/api';
 
 /**
  * MixDatabaseDataValueRestService

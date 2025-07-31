@@ -1,6 +1,7 @@
 // related-attribute-set-rest-portal-service.ts
 // Migrated from legacy RestRelatedMixDatabasePortalService (related-mix-database/portal)
 import { BaseRestService } from '@mixcore/base';
+import type { ApiResult } from '@mixcore/api';
 
 /**
  * REST client for Mixcore Related Attribute Set Portal endpoints.
@@ -14,25 +15,34 @@ export class RelatedAttributeSetRestPortalService extends BaseRestService {
     super(config);
   }
 
-  async get<T = any>(endpoint: string = this.endpoint, params?: Record<string, any>): Promise<T> {
+  /**
+   * GET request for related attribute set (returns ApiResult)
+   */
+  async get(endpoint: string = this.endpoint, params?: Record<string, any>): Promise<ApiResult> {
     if (typeof this.config.get === 'function') {
       return this.config.get(endpoint, params);
     }
-    throw new Error('GET method not implemented');
+    return { isSucceed: false, errors: ['GET method not implemented'] };
   }
 
-  async post<T = any>(endpoint: string = this.endpoint, data: any): Promise<T> {
+  /**
+   * POST request for related attribute set (returns ApiResult)
+   */
+  async post(endpoint: string = this.endpoint, data: any): Promise<ApiResult> {
     if (typeof this.config.post === 'function') {
       return this.config.post(endpoint, data);
     }
-    throw new Error('POST method not implemented');
+    return { isSucceed: false, errors: ['POST method not implemented'] };
   }
 
-  async delete<T = any>(endpoint: string = this.endpoint): Promise<T> {
+  /**
+   * DELETE request for related attribute set (returns ApiResult)
+   */
+  async delete(endpoint: string = this.endpoint): Promise<ApiResult> {
     if (typeof this.config.delete === 'function') {
       return this.config.delete(endpoint);
     }
-    throw new Error('DELETE method not implemented');
+    return { isSucceed: false, errors: ['DELETE method not implemented'] };
   }
 
   handleError(error: any): void {

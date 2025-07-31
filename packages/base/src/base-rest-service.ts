@@ -1,5 +1,6 @@
 
 import { BaseService, BaseServiceConfig } from './base-service';
+import type { ApiResult } from '@mixcore/api';
 
 /**
  * BaseRestService
@@ -15,22 +16,22 @@ export abstract class BaseRestService extends BaseService {
   }
 
   /**
-   * Abstract method for GET requests
+   * Abstract method for GET requests (returns ApiResult)
    * @param endpoint - API endpoint
    * @param params - Optional query params
    */
-  abstract get<T = any>(endpoint: string, params?: Record<string, any>): Promise<T>;
+  abstract get(endpoint: string, params?: Record<string, any>): Promise<ApiResult>;
 
   /**
-   * Abstract method for POST requests
+   * Abstract method for POST requests (returns ApiResult)
    * @param endpoint - API endpoint
    * @param data - Data to post
    */
-  abstract post<T = any>(endpoint: string, data: any): Promise<T>;
+  abstract post(endpoint: string, data: any): Promise<ApiResult>;
 
   /**
-   * Abstract method for DELETE requests
+   * Abstract method for DELETE requests (returns ApiResult)
    * @param endpoint - API endpoint
    */
-  abstract delete<T = any>(endpoint: string): Promise<T>;
+  abstract delete(endpoint: string): Promise<ApiResult>;
 }

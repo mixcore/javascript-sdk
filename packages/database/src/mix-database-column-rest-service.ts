@@ -1,4 +1,5 @@
-import { ApiService } from './api-services';
+import type { ApiService } from '@mixcore/api';
+import type { ApiResult } from '@mixcore/api';
 
 /**
  * MixDatabaseColumnRestService
@@ -18,8 +19,13 @@ export class MixDatabaseColumnRestService {
    * @param mixDatabaseName - The name of the Mixcore database
    * @returns API result
    */
-  async initData(mixDatabaseName: string): Promise<any> {
-    if (!mixDatabaseName) throw new Error('Missing mixDatabaseName');
+  /**
+   * Initializes data for a Mixcore database column by name. Returns ApiResult.
+   */
+  async initData(mixDatabaseName: string): Promise<ApiResult> {
+    if (!mixDatabaseName) {
+      return { isSucceed: false, errors: ['Missing mixDatabaseName'] };
+    }
     const endpoint = `${this.prefixUrl}/init/${mixDatabaseName}`;
     return this.api.get(endpoint);
   }

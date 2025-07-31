@@ -1,15 +1,27 @@
 /**
  * Generic API result type for Mixcore SDK
+ *
+ * @remarks
+ * Used for all API responses. Extend or narrow as needed per endpoint.
+ * @public
  */
 export interface ApiResult {
+  /** Indicates if the API call was successful */
   isSucceed: boolean;
+  /** Response data, if any */
   data?: any;
+  /** Error messages, if any */
   errors?: string[];
+  /** Additional fields for extensibility */
   [key: string]: any;
 }
 
 /**
  * REST API result type for Mixcore SDK
+ *
+ * @remarks
+ * Used for RESTful API responses. Inherits from ApiResult.
+ * @public
  */
 export interface RestApiResult extends ApiResult {}
 /**
@@ -26,60 +38,108 @@ export interface ApiServiceConfig {
   [key: string]: any;
 }
 
+export type ApiServiceHook = {
+  onRequest?: (req: RequestInit & { url: string }) => void | Promise<void>;
+  onResponse?: (res: Response, req: RequestInit & { url: string }) => void | Promise<void>;
+};
+
 export class ApiService {
   private config: ApiServiceConfig;
+  private hooks: ApiServiceHook[] = [];
 
   constructor(config: ApiServiceConfig) {
     this.config = config;
   }
 
   /**
-   * Generic GET request
-   * @param endpoint - API endpoint
-   * @param params - Optional query params
+   * Register a request/response hook
    */
-  async get<T = any>(endpoint: string, params?: Record<string, any>): Promise<T> {
+  use(hook: ApiServiceHook) {
+    this.hooks.push(hook);
+  }
+
+  /**
+   * Generic GET request (returns ApiResult)
+   */
+  async get(endpoint: string, params?: Record<string, any>): Promise<ApiResult> {
     const url = new URL(endpoint, this.config.apiBaseUrl);
     if (params) {
       Object.entries(params).forEach(([k, v]) => url.searchParams.append(k, String(v)));
     }
-    const res = await fetch(url.toString(), {
+    const req: RequestInit & { url: string } = {
+      url: url.toString(),
       headers: this.config.apiKey ? { 'Authorization': `Bearer ${this.config.apiKey}` } : undefined,
-    });
-    if (!res.ok) throw new Error(`GET ${url}: ${res.status} ${res.statusText}`);
-    return res.json();
+    };
+    for (const hook of this.hooks) if (hook.onRequest) await hook.onRequest(req);
+    try {
+      const res = await fetch(req.url, req);
+      for (const hook of this.hooks) if (hook.onResponse) await hook.onResponse(res, req);
+      const data = await res.json().catch(() => undefined);
+      if (!res.ok) {
+        return { isSucceed: false, data, errors: [res.statusText], status: res.status };
+      }
+      return { isSucceed: true, data, status: res.status };
+    } catch (err) {
+      return { isSucceed: false, errors: [(err as Error).message] };
+    }
   }
 
   /**
-   * Generic POST request
-   * @param endpoint - API endpoint
-   * @param data - Data to post
+   * Generic POST request (returns ApiResult, supports JSON or FormData)
    */
-  async post<T = any>(endpoint: string, data: any): Promise<T> {
+  async post(endpoint: string, data: any, options?: { isFormData?: boolean }): Promise<ApiResult> {
     const url = new URL(endpoint, this.config.apiBaseUrl);
-    const res = await fetch(url.toString(), {
+    let body: any = data;
+    let headers: Record<string, string> = {};
+    if (options?.isFormData) {
+      // Let browser set Content-Type for FormData
+      body = data;
+    } else {
+      body = JSON.stringify(data);
+      headers['Content-Type'] = 'application/json';
+    }
+    if (this.config.apiKey) headers['Authorization'] = `Bearer ${this.config.apiKey}`;
+    const req: RequestInit & { url: string } = {
+      url: url.toString(),
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(this.config.apiKey ? { 'Authorization': `Bearer ${this.config.apiKey}` } : {}),
-      },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) throw new Error(`POST ${url}: ${res.status} ${res.statusText}`);
-    return res.json();
+      headers,
+      body,
+    };
+    for (const hook of this.hooks) if (hook.onRequest) await hook.onRequest(req);
+    try {
+      const res = await fetch(req.url, req);
+      for (const hook of this.hooks) if (hook.onResponse) await hook.onResponse(res, req);
+      const respData = await res.json().catch(() => undefined);
+      if (!res.ok) {
+        return { isSucceed: false, data: respData, errors: [res.statusText], status: res.status };
+      }
+      return { isSucceed: true, data: respData, status: res.status };
+    } catch (err) {
+      return { isSucceed: false, errors: [(err as Error).message] };
+    }
   }
 
   /**
-   * Generic DELETE request
-   * @param endpoint - API endpoint
+   * Generic DELETE request (returns ApiResult)
    */
-  async delete<T = any>(endpoint: string): Promise<T> {
+  async delete(endpoint: string): Promise<ApiResult> {
     const url = new URL(endpoint, this.config.apiBaseUrl);
-    const res = await fetch(url.toString(), {
+    const req: RequestInit & { url: string } = {
+      url: url.toString(),
       method: 'DELETE',
       headers: this.config.apiKey ? { 'Authorization': `Bearer ${this.config.apiKey}` } : undefined,
-    });
-    if (!res.ok) throw new Error(`DELETE ${url}: ${res.status} ${res.statusText}`);
-    return res.json();
+    };
+    for (const hook of this.hooks) if (hook.onRequest) await hook.onRequest(req);
+    try {
+      const res = await fetch(req.url, req);
+      for (const hook of this.hooks) if (hook.onResponse) await hook.onResponse(res, req);
+      const data = await res.json().catch(() => undefined);
+      if (!res.ok) {
+        return { isSucceed: false, data, errors: [res.statusText], status: res.status };
+      }
+      return { isSucceed: true, data, status: res.status };
+    } catch (err) {
+      return { isSucceed: false, errors: [(err as Error).message] };
+    }
   }
 }

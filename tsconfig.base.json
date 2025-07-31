@@ -10,7 +10,13 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@mixcore/api": ["packages/api/src"],
+      "@mixcore/shared": ["packages/shared/src"],
+      "@mixcore/config": ["packages/config/src"]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }
