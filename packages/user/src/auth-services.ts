@@ -261,4 +261,41 @@ export class AuthService {
     const roles = this.authentication.info.userRoles || [];
     return roles.some((m: any) => m.description === roleName && m.isActived);
   }
+
+  async getRoles(): Promise<ApiResult> {
+    return this.config.getApiResult({
+      method: 'GET',
+      url: '/api/v2/rest/auth/role'
+    });
+  }
+
+  async createRole(data: {description: string}): Promise<ApiResult> {
+    return this.config.getApiResult({
+      method: 'POST',
+      url: '/api/v2/rest/auth/role/create',
+      data
+    });
+  }
+
+  async updateRole(id: string, data: {description: string}): Promise<ApiResult> {
+    return this.config.getApiResult({
+      method: 'PUT',
+      url: `/api/v2/rest/auth/role/${id}`,
+      data
+    });
+  }
+
+  async deleteRole(id: string): Promise<ApiResult> {
+    return this.config.getApiResult({
+      method: 'DELETE',
+      url: `/api/v2/rest/auth/role/${id}`
+    });
+  }
+
+  async getDefaultRole(): Promise<ApiResult> {
+    return this.config.getApiResult({
+      method: 'GET',
+      url: '/api/v2/rest/auth/role/default'
+    });
+  }
 }

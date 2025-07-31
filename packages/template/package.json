@@ -11,7 +11,8 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "@mixcore/api": "workspace:*"
+    "@mixcore/api": "workspace:*",
+    "@mixcore/shared": "workspace:*"
   },
   "license": "SEE LICENSE IN LICENSE",
   "repository": "https://github.com/mixcore/javascript-sdk",

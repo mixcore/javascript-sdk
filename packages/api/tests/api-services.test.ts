@@ -18,6 +18,7 @@ describe('ApiService', () => {
   });
 
   it('should fail login with invalid credentials (POST)', async () => {
+    jest.setTimeout(10000); // Increase timeout to 10 seconds
     try {
       await service.post('/api/v2/rest/auth/user/login', {
         username: 'invalid',

@@ -1,18 +1,41 @@
-import { AuthService, AuthServiceConfig } from './auth-services';
+import { AuthService, AuthServiceConfig } from '../src/auth-services';
 
 describe('AuthService', () => {
   const config: AuthServiceConfig = {
     apiBaseUrl: 'https://mixcore.net',
     encryptAES: (data) => data, // mock encryption
     updateAuthData: jest.fn(),
-    fillAuthData: jest.fn(async () => ({ info: { userRoles: [{ description: 'Admin', isActived: true }] } })),
+    fillAuthData: jest.fn(async () => ({
+      info: {
+        userRoles: [{
+          id: '1',
+          description: 'Admin',
+          isActived: true
+        }],
+        accessToken: 'mock-access-token',
+        refreshToken: 'mock-refresh-token'
+      }
+    })),
     initAllSettings: jest.fn(async () => {}),
-    getApiResult: jest.fn(async (req) => ({ isSucceed: true, data: {} })),
-    getRestApiResult: jest.fn(async (req) => ({ isSucceed: true, data: {} })),
+    getApiResult: jest.fn(async (req) => ({
+      isSucceed: true,
+      data: {
+        id: '1',
+        description: 'Test Role'
+      }
+    })),
+    getRestApiResult: jest.fn(async (req) => ({
+      isSucceed: true,
+      data: {
+        id: '1',
+        description: 'Test Role'
+      }
+    })),
     localStorage: { removeItem: jest.fn() } as any,
   };
   const service = new AuthService(config);
 
+  // Existing auth tests
   it('should call saveRegistration', async () => {
     await service.saveRegistration({});
     expect(config.getApiResult).toHaveBeenCalled();
@@ -36,5 +59,61 @@ describe('AuthService', () => {
   it('should call isInRole', async () => {
     await service.fillAuthData();
     expect(service.isInRole('Admin')).toBe(true);
+  });
+
+  // Role management tests
+  it('should get role list', async () => {
+    const result = await service.getRoles();
+    expect(result).toEqual({
+      isSucceed: true,
+      data: {
+        id: '1',
+        description: 'Test Role'
+      }
+    });
+  });
+
+  it('should create role', async () => {
+    const result = await service.createRole({ description: 'New Role' });
+    expect(result).toEqual({
+      isSucceed: true,
+      data: {
+        id: '1',
+        description: 'Test Role'
+      }
+    });
+  });
+
+  it('should update role', async () => {
+    const result = await service.updateRole('1', { description: 'Updated Role' });
+    expect(result).toEqual({
+      isSucceed: true,
+      data: {
+        id: '1',
+        description: 'Test Role'
+      }
+    });
+  });
+
+  it('should delete role', async () => {
+    const result = await service.deleteRole('1');
+    expect(result).toEqual({
+      isSucceed: true,
+      data: {
+        id: '1',
+        description: 'Test Role'
+      }
+    });
+  });
+
+  it('should get default role', async () => {
+    const result = await service.getDefaultRole();
+    expect(result).toEqual({
+      isSucceed: true,
+      data: {
+        id: '1',
+        description: 'Test Role'
+      }
+    });
   });
 });

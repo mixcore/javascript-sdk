@@ -1,5 +1,5 @@
-import { ApiService } from './src/api-services';
-import { TemplateService } from './src/template-services';
+import { ApiService } from '@mixcore/api';
+import { TemplateService } from '../src/template-service';
 
 describe('TemplateService', () => {
   let api: ApiService;
