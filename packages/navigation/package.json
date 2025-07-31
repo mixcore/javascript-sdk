@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist",
     "test": "jest --passWithNoTests",
-    "lint": "eslint src --ext .ts --config ../../.eslintrc.js"
+    "lint": "eslint src --ext .ts --config ../../eslint.config.js"
   },
   "license": "SEE LICENSE IN LICENSE",
   "repository": "https://github.com/mixcore/javascript-sdk",

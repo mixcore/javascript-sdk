@@ -80,17 +80,13 @@ export class ApiService implements ApiService {
       body,
     };
     for (const hook of this.hooks) if (hook.onRequest) await hook.onRequest(req);
-    try {
-      const res = await fetch(req.url, req);
-      for (const hook of this.hooks) if (hook.onResponse) await hook.onResponse(res, req);
-      const respData = await res.json().catch(() => undefined);
-      if (!res.ok) {
-        return { isSucceed: false, data: respData, errors: [res.statusText], status: res.status };
-      }
-      return { isSucceed: true, data: respData, status: res.status };
-    } catch (err) {
-      throw err;
+    const res = await fetch(req.url, req);
+    for (const hook of this.hooks) if (hook.onResponse) await hook.onResponse(res, req);
+    const respData = await res.json().catch(() => undefined);
+    if (!res.ok) {
+      return { isSucceed: false, data: respData, errors: [res.statusText], status: res.status };
     }
+    return { isSucceed: true, data: respData, status: res.status };
   }
 
   /**
