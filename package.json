@@ -11,7 +11,8 @@
     "build": "lerna run build --stream",
     "test": "npm run build && lerna run test --stream",
     "lint": "lerna run lint --stream",
-    "compile": "tsc --build tsconfig.base.json"
+    "compile": "tsc --build tsconfig.base.json",
+    "type-check": "lerna run type-check --stream"
   },
   "devDependencies": {
     "@jest/types": "^30.0.0",
