@@ -1,5 +1,6 @@
 import { ApiService } from '@mixcore/api';
 import { MixDatabaseDataRestPortalService } from '../src/mix-database-data-rest-portal-service';
+import { Blob } from 'node:buffer';
 
 describe('MixDatabaseDataRestPortalService', () => {
   let api: ApiService;
@@ -63,7 +64,9 @@ describe('MixDatabaseDataRestPortalService', () => {
   });
 
   it('should return error if no mixDatabaseName for import', async () => {
-    const result = await portalService.import('', new File([''], 'test.txt'));
+    const fakeFile = new Blob([''], { type: 'text/plain' }) as unknown as File;
+    Object.defineProperty(fakeFile, 'name', { value: 'test.txt' });
+    const result = await portalService.import('', fakeFile);
     expect(result.isSucceed).toBe(false);
     expect(result.errors).toContain('Missing mixDatabaseName');
   });
@@ -75,7 +78,8 @@ describe('MixDatabaseDataRestPortalService', () => {
   });
 
   it('should call import', async () => {
-    const fakeFile = new File(['test'], 'test.txt', { type: 'text/plain' });
+    const fakeFile = new Blob(['test'], { type: 'text/plain' }) as unknown as File;
+    Object.defineProperty(fakeFile, 'name', { value: 'test.txt' });
     globalThis.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => ({ imported: true }) });
     const result = await portalService.import('testdb', fakeFile);
     expect(result.data).toEqual({ imported: true });
