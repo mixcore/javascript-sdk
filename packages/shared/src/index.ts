@@ -1,5 +1,6 @@
 
 export * from './api-types';
+export { ApiService } from './api-types';
 export * from './file-types';
 export * from './common-services';
 export * from './crypto-services';

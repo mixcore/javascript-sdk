@@ -12,7 +12,9 @@
     "lint": "lerna run lint --stream"
   },
   "devDependencies": {
+    "@jest/types": "^30.0.0",
     "@types/jest": "^30.0.0",
+    "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "jest": "^30.0.5",

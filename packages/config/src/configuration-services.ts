@@ -1,5 +1,4 @@
-import { ApiService } from '@mixcore/api';
-import { ApiServiceConfig } from '@mixcore/shared';
+import { ApiService, ApiServiceConfig } from '@mixcore/shared';
 
 /**
  * ConfigurationServices

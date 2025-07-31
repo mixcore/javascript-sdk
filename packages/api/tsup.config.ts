@@ -7,9 +7,11 @@ export default defineConfig({
     resolve: true,
     compilerOptions: {
       rootDir: 'src',
-      outDir: 'dist'
+      outDir: 'dist/types',
+      declarationDir: 'dist/types'
     }
   },
+  outDir: 'dist',
   splitting: false,
   sourcemap: true,
   clean: true,
