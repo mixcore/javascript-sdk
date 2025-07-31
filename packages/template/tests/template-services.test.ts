@@ -17,6 +17,10 @@ describe('TemplateService', () => {
   it('should call copy', async () => {
     globalThis.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => ({ id: 'copy' }) });
     const result = await templateService.copy('123');
-    expect(result).toEqual({ id: 'copy' });
+    expect(result).toEqual({
+      data: { id: 'copy' },
+      isSucceed: true,
+      status: undefined
+    });
   });
 });

@@ -1,4 +1,5 @@
-import { RelatedAttributeDataRestPortalService } from './related-attribute-data-rest-portal-service';
+import { RelatedAttributeDataRestPortalService } from '../src/related-attribute-data-rest-portal-service';
+import { ApiService } from '@mixcore/api';
 
 describe('RelatedAttributeDataRestPortalService', () => {
   it('should instantiate with correct endpoint', () => {

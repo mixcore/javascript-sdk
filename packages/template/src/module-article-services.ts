@@ -26,7 +26,7 @@ export class ModuleArticleService {
    * @param params - Optional query params
    */
   async fetchArticles(moduleId: string, params?: Record<string, any>): Promise<any[]> {
-    const url = new URL('/api/v2/rest/mixcore/module-article/get-module-article', this.config.apiBaseUrl);
+    const url = new URL('/api/v2/rest/mix-portal/module-article', this.config.apiBaseUrl);
     url.searchParams.append('moduleId', String(moduleId));
     if (params) {
       Object.entries(params).forEach(([k, v]) => url.searchParams.append(k, String(v)));

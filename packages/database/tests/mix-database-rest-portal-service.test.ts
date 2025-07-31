@@ -14,8 +14,12 @@ describe('MixDatabaseRestPortalService', () => {
     expect(dbService).toBeInstanceOf(MixDatabaseRestPortalService);
   });
 
-  it('should throw if no id provided', async () => {
-    await expect(dbService.migrate({} as any)).rejects.toThrow('Missing id for migration');
+  it('should return error if no id provided', async () => {
+    const result = await dbService.migrate({} as any);
+    expect(result).toEqual({
+      errors: ['Missing id for migration'],
+      isSucceed: false
+    });
   });
 
   it('should call migrate', async () => {

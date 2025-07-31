@@ -26,7 +26,7 @@ export class ModuleGalleryService {
    * @param params - Optional query params
    */
   async fetchGalleryItems(moduleId: string, params?: Record<string, any>): Promise<any[]> {
-    const url = new URL('/api/v2/rest/mixcore/module-gallery/get-module-gallery', this.config.apiBaseUrl);
+    const url = new URL('/api/v2/rest/mix-portal/module-gallery', this.config.apiBaseUrl);
     url.searchParams.append('moduleId', String(moduleId));
     if (params) {
       Object.entries(params).forEach(([k, v]) => url.searchParams.append(k, String(v)));
