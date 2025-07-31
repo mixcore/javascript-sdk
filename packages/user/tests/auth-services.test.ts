@@ -51,6 +51,30 @@ describe('AuthService', () => {
     expect(config.updateAuthData).toHaveBeenCalled();
   });
 
+  it('should call loginUnsecure with correct payload', async () => {
+    await service.loginUnsecure({
+      email: 'test@example.com',
+      userName: 'user',
+      phoneNumber: '123456789',
+      password: 'pass',
+      rememberMe: true,
+      returnUrl: '/home'
+    });
+    expect(config.getRestApiResult).toHaveBeenCalledWith({
+      method: 'POST',
+      url: '/api/v2/rest/auth/user/login-unsecure',
+      data: JSON.stringify({
+        email: 'test@example.com',
+        userName: 'user',
+        phoneNumber: '123456789',
+        password: 'pass',
+        rememberMe: true,
+        returnUrl: '/home'
+      })
+    }, true);
+    expect(config.updateAuthData).toHaveBeenCalled();
+  });
+
   it('should call logOut and removeItem', async () => {
     await service.logOut();
     expect(config.localStorage?.removeItem).toHaveBeenCalledWith('authorizationData');

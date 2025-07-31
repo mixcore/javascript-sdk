@@ -134,18 +134,28 @@ export class AuthService {
    * @param loginData Login credentials (shared domain types recommended)
    */
   async login(loginData: { username: string; password: string; rememberMe?: boolean }): Promise<RestApiResult> {
-    const data = {
-      UserName: loginData.username,
-      Password: loginData.password,
-      RememberMe: loginData.rememberMe,
-      Email: '',
-      ReturnUrl: '',
-    };
-    const message = this.config.encryptAES(JSON.stringify(data));
+    return this.loginUnsecure({
+      userName: loginData.username,
+      password: loginData.password,
+      rememberMe: loginData.rememberMe,
+      email: '',
+      phoneNumber: '',
+      returnUrl: ''
+    });
+  }
+
+  async loginUnsecure(loginData: {
+    email: string;
+    userName: string;
+    phoneNumber: string;
+    password: string;
+    rememberMe: boolean;
+    returnUrl: string;
+  }): Promise<RestApiResult> {
     const req = {
       method: 'POST',
-      url: '/account/login',
-      data: JSON.stringify({ message }),
+      url: '/api/v2/rest/auth/user/login-unsecure',
+      data: JSON.stringify(loginData),
     };
     const resp = await this.config.getRestApiResult(req, true);
     if (resp.isSucceed) {
