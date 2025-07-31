@@ -1,6 +1,7 @@
 {
   "name": "@mixcore/javascript-sdk",
   "private": true,
+  "type": "module",
   "version": "0.0.1",
   "description": "Modular, framework-agnostic SDK for Mixcore projects (shared, base, apis)",
   "workspaces": [
@@ -18,6 +19,7 @@
     "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
+    "globals": "^16.3.0",
     "jest": "^30.0.5",
     "lerna": "^7.0.0",
     "ts-jest": "^29.4.0",

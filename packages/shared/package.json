@@ -8,15 +8,24 @@
   "scripts": {
     "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist",
     "test": "jest",
-    "lint": "eslint src --ext .ts"
+    "lint": "eslint src --ext .ts --config ../../eslint.config.js"
   },
   "license": "SEE LICENSE IN LICENSE",
   "repository": "https://github.com/mixcore/javascript-sdk",
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["mixcore", "sdk", "shared", "typescript", "framework-agnostic"],
+  "keywords": [
+    "mixcore",
+    "sdk",
+    "shared",
+    "typescript",
+    "framework-agnostic"
+  ],
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "globals": "^16.3.0"
   }
 }

@@ -4,23 +4,6 @@
  * Contains types that need to be shared across packages to avoid circular dependencies
  */
 
-export interface ApiServiceConfig {
-  apiBaseUrl: string;
-  apiKey?: string;
-}
-
-export interface ApiService {
-  config: ApiServiceConfig;
-  request<T = any>(options: {
-    url: string;
-    method?: string;
-    body?: any;
-    headers?: Record<string, string>;
-  }): Promise<T>;
-  get<T = any>(url: string): Promise<T>;
-  post<T = any>(url: string, body?: any): Promise<T>;
-}
-
 export interface UserServices {
   constructor(api: ApiService): void;
   // Add user service methods here
