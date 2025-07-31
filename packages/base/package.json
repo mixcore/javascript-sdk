@@ -4,6 +4,9 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist"
+  },
   "license": "SEE LICENSE IN LICENSE",
   "repository": "https://github.com/mixcore/javascript-sdk"
 }

@@ -1,6 +1,6 @@
 // related-attribute-set-rest-portal-service.ts
 // Migrated from legacy RestRelatedMixDatabasePortalService (related-mix-database/portal)
-import { BaseRestService } from '../../base/src';
+import { BaseRestService } from '@mixcore/base';
 
 /**
  * REST client for Mixcore Related Attribute Set Portal endpoints.
