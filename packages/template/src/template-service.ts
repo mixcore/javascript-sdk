@@ -1,4 +1,4 @@
-import { ApiService } from './api-services';
+import { ApiService } from '@mixcore/api';
 
 export class TemplateService {
   private api: ApiService;

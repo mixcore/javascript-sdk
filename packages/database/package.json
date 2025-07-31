@@ -10,6 +10,9 @@
     "test": "jest",
     "lint": "eslint src --ext .ts"
   },
+  "dependencies": {
+    "@mixcore/api": "workspace:*"
+  },
   "license": "SEE LICENSE IN LICENSE",
   "repository": "https://github.com/mixcore/javascript-sdk",
   "publishConfig": {
