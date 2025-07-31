@@ -6,18 +6,61 @@
  * Refactored from legacy AngularJS service. All SPA dependencies removed.
  * Configuration is injected via constructor.
  */
+import type { ApiResult, RestApiResult } from '@mixcore/api';
+import type { CryptoService } from '@mixcore/shared';
+import type { ConfigurationService } from '@mixcore/config';
+
+/**
+ * Configuration for AuthService
+ * Integrates with shared, api, and config domain packages.
+ * @public
+ */
 export interface AuthServiceConfig {
+  /** Base URL for API requests */
   apiBaseUrl: string;
+  /** Optional API key for authentication */
   apiKey?: string;
-  encryptAES: (data: string) => string;
+  /** AES encryption function from shared domain */
+  encryptAES: CryptoService['encryptAES'];
+  /** Update authentication data in storage (shared/config) */
   updateAuthData: (data: any) => void;
+  /** Fill authentication data from storage (shared/config) */
   fillAuthData: () => Promise<any>;
+  /** Initialize all settings after login (config) */
   initAllSettings: () => Promise<void>;
-  getApiResult: (req: any) => Promise<any>;
-  getRestApiResult: (req: any, ...args: any[]) => Promise<any>;
+  /** Generic API result fetcher (api domain) */
+  getApiResult: (req: any) => Promise<ApiResult>;
+  /** REST API result fetcher (api domain) */
+  getRestApiResult: (req: any, ...args: any[]) => Promise<RestApiResult>;
+  /** Optional localStorage implementation (shared) */
   localStorage?: Storage;
+  /** Optional plugin hooks for extensibility */
+  plugins?: AuthServicePlugin[];
+  /** Optional configuration service (config domain) */
+  configurationService?: ConfigurationService;
 }
 
+/**
+ * Plugin interface for AuthService extensibility
+ * @public
+ */
+export interface AuthServicePlugin {
+  /** Called after successful login */
+  onLoginSuccess?(resp: any): Promise<void> | void;
+  /** Called after logout */
+  onLogout?(): Promise<void> | void;
+}
+
+/**
+ * AuthService
+ * Framework-agnostic, TypeScript-native authentication API client for Mixcore
+ *
+ * @remarks
+ * All SPA dependencies removed. Configuration and plugins are injected.
+ * All public APIs are typed and documented.
+ *
+ * @public
+ */
 export class AuthService {
   private config: AuthServiceConfig;
   public authentication: any = null;
@@ -26,31 +69,71 @@ export class AuthService {
     this.config = config;
   }
 
-  async saveRegistration(registration: any): Promise<any> {
-    return this.config.getApiResult({
-      method: 'POST',
-      url: '/account/register',
-      data: registration,
-    });
+  /**
+   * Register a new user
+   */
+  /**
+   * Register a new user
+   * @param registration Registration data (shared domain types recommended)
+   */
+  async saveRegistration(registration: Record<string, any>): Promise<ApiResult> {
+    try {
+      return await this.config.getApiResult({
+        method: 'POST',
+        url: '/account/register',
+        data: registration,
+      });
+    } catch (err) {
+      throw new Error('Registration failed: ' + (err as Error).message);
+    }
   }
 
-  async forgotPassword(data: any): Promise<any> {
-    return this.config.getRestApiResult({
-      method: 'POST',
-      url: '/account/forgot-password',
-      data: JSON.stringify(data),
-    });
+  /**
+   * Request a password reset email
+   */
+  /**
+   * Request a password reset email
+   * @param data Forgot password request (shared domain types recommended)
+   */
+  async forgotPassword(data: Record<string, any>): Promise<RestApiResult> {
+    try {
+      return await this.config.getRestApiResult({
+        method: 'POST',
+        url: '/account/forgot-password',
+        data: JSON.stringify(data),
+      });
+    } catch (err) {
+      throw new Error('Forgot password failed: ' + (err as Error).message);
+    }
   }
 
-  async resetPassword(data: any): Promise<any> {
-    return this.config.getRestApiResult({
-      method: 'POST',
-      url: '/account/reset-password',
-      data: JSON.stringify(data),
-    });
+  /**
+   * Reset password with token
+   */
+  /**
+   * Reset password with token
+   * @param data Reset password request (shared domain types recommended)
+   */
+  async resetPassword(data: Record<string, any>): Promise<RestApiResult> {
+    try {
+      return await this.config.getRestApiResult({
+        method: 'POST',
+        url: '/account/reset-password',
+        data: JSON.stringify(data),
+      });
+    } catch (err) {
+      throw new Error('Reset password failed: ' + (err as Error).message);
+    }
   }
 
-  async login(loginData: { username: string; password: string; rememberMe?: boolean }): Promise<any> {
+  /**
+   * Login with username and password
+   */
+  /**
+   * Login with username and password
+   * @param loginData Login credentials (shared domain types recommended)
+   */
+  async login(loginData: { username: string; password: string; rememberMe?: boolean }): Promise<RestApiResult> {
     const data = {
       UserName: loginData.username,
       Password: loginData.password,
@@ -68,11 +151,25 @@ export class AuthService {
     if (resp.isSucceed) {
       this.config.updateAuthData(resp.data);
       await this.config.initAllSettings();
+      // Plugin hook
+      if (this.config.plugins) {
+        for (const plugin of this.config.plugins) {
+          if (plugin.onLoginSuccess) await plugin.onLoginSuccess(resp);
+        }
+      }
     }
     return resp;
   }
 
-  async externalLogin(loginData: any, provider: string): Promise<any> {
+  /**
+   * Login with external provider
+   */
+  /**
+   * Login with external provider
+   * @param loginData External login credentials (shared domain types recommended)
+   * @param provider Provider name
+   */
+  async externalLogin(loginData: { username: string; email: string; accessToken: string }, provider: string): Promise<RestApiResult> {
     const data = {
       provider,
       username: loginData.username,
@@ -89,22 +186,57 @@ export class AuthService {
     if (resp.isSucceed) {
       this.config.updateAuthData(resp.data);
       await this.config.initAllSettings();
+      // Plugin hook
+      if (this.config.plugins) {
+        for (const plugin of this.config.plugins) {
+          if (plugin.onLoginSuccess) await plugin.onLoginSuccess(resp);
+        }
+      }
     }
     return resp;
   }
 
+  /**
+   * Log out the current user
+   */
+  /**
+   * Log out the current user
+   * Integrates with shared and config domain for storage and plugin hooks.
+   */
   async logOut(): Promise<void> {
     if (this.config.localStorage) {
       this.config.localStorage.removeItem('authorizationData');
     }
+    // Plugin hook
+    if (this.config.plugins) {
+      for (const plugin of this.config.plugins) {
+        if (plugin.onLogout) await plugin.onLogout();
+      }
+    }
     // Optionally, call /account/logout endpoint if needed
+    // Optionally, use configurationService for additional cleanup
+    if (this.config.configurationService) {
+      await this.config.configurationService.clear();
+    }
   }
 
+  /**
+   * Fill authentication data from storage
+   */
+  /**
+   * Fill authentication data from storage (shared/config domain)
+   */
   async fillAuthData(): Promise<void> {
     this.authentication = await this.config.fillAuthData();
   }
 
-  async refreshToken(id: string, accessToken: string): Promise<any> {
+  /**
+   * Refresh authentication token
+   */
+  /**
+   * Refresh authentication token (api domain)
+   */
+  async refreshToken(id: string, accessToken: string): Promise<ApiResult | void> {
     if (!id) return this.logOut();
     const req = {
       method: 'POST',
@@ -115,10 +247,13 @@ export class AuthService {
     if (resp.isSucceed) {
       return this.config.updateAuthData(resp.data);
     } else {
-      return this.logOut();
+      await this.logOut();
     }
   }
 
+  /**
+   * Check if user is in a given role
+   */
   isInRole(roleName: string): boolean {
     if (!this.authentication || !this.authentication.info) return false;
     const roles = this.authentication.info.userRoles || [];

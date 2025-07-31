@@ -1,4 +1,18 @@
 /**
+ * Generic API result type for Mixcore SDK
+ */
+export interface ApiResult {
+  isSucceed: boolean;
+  data?: any;
+  errors?: string[];
+  [key: string]: any;
+}
+
+/**
+ * REST API result type for Mixcore SDK
+ */
+export interface RestApiResult extends ApiResult {}
+/**
  * ApiService
  * Framework-agnostic, TypeScript-native API client for Mixcore
  *

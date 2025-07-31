@@ -33,11 +33,23 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
-  packages/apis: {}
+  packages/api: {}
 
   packages/base: {}
 
+  packages/config: {}
+
+  packages/database: {}
+
+  packages/file: {}
+
+  packages/navigation: {}
+
   packages/shared: {}
+
+  packages/template: {}
+
+  packages/user: {}
 
 packages:
 
