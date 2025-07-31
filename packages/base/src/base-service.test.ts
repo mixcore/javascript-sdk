@@ -2,10 +2,14 @@ import { BaseService, BaseServiceConfig } from './base-service';
 
 describe('BaseService', () => {
   class TestService extends BaseService {
-    handleError(error: any) {}
+    handleError(error: any): void {
+      // Custom error handling for test
+    }
   }
-  it('should instantiate with config', () => {
-    const svc = new TestService({ apiBaseUrl: 'https://api.example.com' });
-    expect(svc).toBeInstanceOf(TestService);
+
+  it('should construct with config', () => {
+    const config: BaseServiceConfig = { apiBaseUrl: 'https://mixcore.net' };
+    const service = new TestService(config);
+    expect(service).toBeInstanceOf(TestService);
   });
 });

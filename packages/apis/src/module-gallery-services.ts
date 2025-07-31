@@ -26,9 +26,16 @@ export class ModuleGalleryService {
    * @param params - Optional query params
    */
   async fetchGalleryItems(moduleId: string, params?: Record<string, any>): Promise<any[]> {
-    // TODO: Implement API call using fetch/axios, etc.
-    // Example: `${this.config.apiBaseUrl}/modules/${moduleId}/gallery`
-    return [];
+    const url = new URL('/api/v2/rest/mixcore/module-gallery/get-module-gallery', this.config.apiBaseUrl);
+    url.searchParams.append('moduleId', String(moduleId));
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => url.searchParams.append(k, String(v)));
+    }
+    const res = await fetch(url.toString(), {
+      headers: this.config.apiKey ? { 'Authorization': `Bearer ${this.config.apiKey}` } : undefined,
+    });
+    if (!res.ok) throw new Error(`GET ${url}: ${res.status} ${res.statusText}`);
+    return res.json();
   }
 
   /**
@@ -37,9 +44,22 @@ export class ModuleGalleryService {
    * @param file - File or data to upload
    * @param meta - Optional metadata
    */
-  async uploadGalleryItem(moduleId: string, file: any, meta?: Record<string, any>): Promise<any> {
-    // TODO: Implement upload logic
-    return {};
+  async uploadGalleryItem(moduleId: string, file: File | Blob, meta?: Record<string, any>): Promise<any> {
+    const url = new URL(`/api/v2/rest/mixcore/module-gallery/${moduleId}/upload`, this.config.apiBaseUrl);
+    const formData = new FormData();
+    formData.append('file', file);
+    if (meta) {
+      Object.entries(meta).forEach(([k, v]) => formData.append(k, String(v)));
+    }
+    const res = await fetch(url.toString(), {
+      method: 'POST',
+      headers: {
+        ...(this.config.apiKey ? { 'Authorization': `Bearer ${this.config.apiKey}` } : {}),
+      },
+      body: formData,
+    });
+    if (!res.ok) throw new Error(`POST ${url}: ${res.status} ${res.statusText}`);
+    return res.json();
   }
 
   /**
@@ -48,7 +68,12 @@ export class ModuleGalleryService {
    * @param itemId - The gallery item identifier
    */
   async deleteGalleryItem(moduleId: string, itemId: string): Promise<boolean> {
-    // TODO: Implement delete logic
+    const url = new URL(`/api/v2/rest/mixcore/module-gallery/${moduleId}/${itemId}`, this.config.apiBaseUrl);
+    const res = await fetch(url.toString(), {
+      method: 'DELETE',
+      headers: this.config.apiKey ? { 'Authorization': `Bearer ${this.config.apiKey}` } : undefined,
+    });
+    if (!res.ok) throw new Error(`DELETE ${url}: ${res.status} ${res.statusText}`);
     return true;
   }
 }

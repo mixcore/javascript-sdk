@@ -11,6 +11,7 @@ export interface CommonServiceConfig {
   getRestApiResult: (req: any, ...args: any[]) => Promise<any>;
   getAnonymousApiResult: (req: any) => Promise<any>;
   localStorage?: Storage;
+  onAlert?: (title: string, message: string) => void;
 }
 
 export class CommonService {
@@ -21,7 +22,6 @@ export class CommonService {
   }
 
   async loadJArrayData(name: string): Promise<any> {
-    // TODO: Implement using config.getAnonymousApiResult
     return this.config.getAnonymousApiResult({
       method: 'GET',
       url: `/portal/jarray-data/${name}`
@@ -29,7 +29,6 @@ export class CommonService {
   }
 
   async stopApplication(): Promise<any> {
-    // TODO: Implement using config.getRestApiResult
     return this.config.getRestApiResult({
       method: 'GET',
       url: '/rest/shared/stop-application'
@@ -37,7 +36,6 @@ export class CommonService {
   }
 
   async clearCache(): Promise<any> {
-    // TODO: Implement using config.getRestApiResult
     return this.config.getRestApiResult({
       method: 'GET',
       url: '/rest/shared/clear-cache'
@@ -45,7 +43,6 @@ export class CommonService {
   }
 
   async loadJsonData(name: string): Promise<any> {
-    // TODO: Implement using config.getAnonymousApiResult
     return this.config.getAnonymousApiResult({
       method: 'GET',
       url: `/portal/json-data/${name}`
@@ -53,9 +50,11 @@ export class CommonService {
   }
 
   async showAlertMsg(title: string, message: string): Promise<void> {
-    // TODO: Implement a framework-agnostic alert (or leave for consumer to implement)
-    // Example: throw new Error(`${title}: ${message}`);
-    // Or: this.config.onAlert?.(title, message);
+    if (typeof this.config.onAlert === 'function') {
+      this.config.onAlert(title, message);
+    } else {
+      throw new Error(`${title}: ${message}`);
+    }
   }
 
   checkFile(fileName: string, validExts: string[]): boolean {
