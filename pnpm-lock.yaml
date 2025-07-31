@@ -78,7 +78,11 @@ importers:
         specifier: workspace:*
         version: link:../api
 
-  packages/user: {}
+  packages/user:
+    dependencies:
+      '@mixcore/api':
+        specifier: workspace:*
+        version: link:../api
 
 packages:
 

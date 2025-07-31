@@ -216,7 +216,9 @@ export class AuthService {
     // Optionally, call /account/logout endpoint if needed
     // Optionally, use configurationService for additional cleanup
     if (this.config.configurationService) {
-      await this.config.configurationService.clear();
+      if (this.config.configurationService && 'clear' in this.config.configurationService) {
+        await (this.config.configurationService as any).clear();
+      }
     }
   }
 
