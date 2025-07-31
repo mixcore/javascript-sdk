@@ -1,17 +1,18 @@
+
 # @mixcore/base
 
-Abstract base classes and interfaces for Mixcore SDK services.
+Mixcore SDK base abstractions. Provides core TypeScript classes and interfaces for all SDK packages, including `BaseService` and `BaseRestService`.
 
 ## Usage
 
 ```ts
-import { BaseService, BaseRestService } from '@mixcore/base';
+import { BaseRestService } from '@mixcore/base';
 ```
 
 ## Features
-- TypeScript-native
-- Abstract error handling
-- Designed for extension
+- Abstract base classes for REST and service logic
+- Injectable configuration
+- No SPA/UI dependencies
 
 ## License
-Mixcore Community License (MCL)
+SEE LICENSE IN LICENSE

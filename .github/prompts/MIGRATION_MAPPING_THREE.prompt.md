@@ -75,9 +75,13 @@ This document provides a detailed mapping and progress tracker for the migration
 | mix-database-data-value-rest-service | app-shared/services/mix-database-data-value/rest-service.js | [x] | [x] | [x] | [ ] |
 | module-data-rest-mvc-service | app-shared/services/module-data-service/rest-mvc-service.js | [x] | [x] | [x] | [ ] |
 | post-rest-mvc-service | app-shared/services/post-service/rest-mvc-service.js | [ ] | [ ] | [ ] | [ ] |
+| post-rest-mvc-service | app-shared/services/post-service/rest-mvc-service.js | [x] | [x] | [x] | [ ] |
 | related-attribute-data-rest-form-service | app-shared/services/related-attribute-data/rest-form-service.js | [ ] | [ ] | [ ] | [ ] |
+| related-attribute-data-rest-form-service | app-shared/services/related-attribute-data/rest-form-service.js | [x] | [x] | [x] | [ ] |
 | related-attribute-data-rest-portal-service | app-shared/services/related-attribute-data/rest-portal-service.js | [ ] | [ ] | [ ] | [ ] |
+| related-attribute-data-rest-portal-service | app-shared/services/related-attribute-data/rest-portal-service.js | [x] | [x] | [x] | [ ] |
 | related-attribute-set-rest-portal-service | app-shared/services/related-attribute-set/rest-portal-service.js | [ ] | [ ] | [ ] | [ ] |
+| related-attribute-set-rest-portal-service | app-shared/services/related-attribute-set/rest-portal-service.js | [x] | [x] | [x] | [ ] |
 
 ### Shared/Core Domain
 | Module                        | Legacy Path                                                      | Migrated | Refactored | Unit Tested | Docs |
@@ -91,7 +95,7 @@ This document provides a detailed mapping and progress tracker for the migration
 | store-services                | app-shared/services/store-services.js                            |    [x]   |    [x]     |    [x]      | [ ]  |
 | shared-module-data-services   | app-shared/components/module-data/shared-module-data-services.js |    [x]   |    [x]     |    [x]      | [ ]  |
 | modal-nav-metas-service       | app-portal/components/modal-nav-metas/script.js                  |    [x]   |    [x]     |    [x]      | [ ]  |
-| shared global.js              | app-portal/shared/global.js                                      |   [ ]    |    [ ]     |    [ ]      | [ ]  |
+| shared global.js              | app-portal/shared/global.js                                      |   [x]    |    [x]     |    [x]      | [ ]  |
 
 ### Base Abstractions
 | Module             | Legacy Path                                   | Migrated | Refactored | Unit Tested | Docs |

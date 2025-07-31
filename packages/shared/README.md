@@ -1,17 +1,18 @@
+
 # @mixcore/shared
 
-Shared utilities and services for Mixcore SDK.
+Mixcore SDK shared utilities and helpers. Provides stateless TypeScript functions, constants, and cross-domain helpers for all SDK packages.
 
 ## Usage
 
 ```ts
-import { CommonServices, SharedModuleDataService } from '@mixcore/shared';
+import { loadFacebookSdk } from '@mixcore/shared';
 ```
 
 ## Features
-- TypeScript-native
-- Stateless helpers
-- No SPA dependencies
+- Utilities for crypto, translation, file, and more
+- No SPA/UI dependencies
+- Framework-agnostic
 
 ## License
-Mixcore Community License (MCL)
+SEE LICENSE IN LICENSE
