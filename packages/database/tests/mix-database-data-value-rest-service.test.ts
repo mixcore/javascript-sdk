@@ -6,7 +6,7 @@ describe('MixDatabaseDataValueRestService', () => {
   let valueService: MixDatabaseDataValueRestService;
 
   beforeEach(() => {
-    api = new ApiService({ apiBaseUrl: 'http://localhost/api/' });
+    api = new ApiService({ apiBaseUrl: 'https://mixcore.net' });
     valueService = new MixDatabaseDataValueRestService(api);
   });
 

@@ -6,7 +6,7 @@ describe('ModuleDataRestMvcService', () => {
   let mvcService: ModuleDataRestMvcService;
 
   beforeEach(() => {
-    api = new ApiService({ apiBaseUrl: 'http://localhost/api/' });
+    api = new ApiService({ apiBaseUrl: 'https://mixcore.net' });
     mvcService = new ModuleDataRestMvcService(api);
   });
 

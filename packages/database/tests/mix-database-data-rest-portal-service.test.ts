@@ -6,7 +6,7 @@ describe('MixDatabaseDataRestPortalService', () => {
   let portalService: MixDatabaseDataRestPortalService;
 
   beforeEach(() => {
-    api = new ApiService({ apiBaseUrl: 'http://localhost/api/' });
+    api = new ApiService({ apiBaseUrl: 'https://mixcore.net' });
     portalService = new MixDatabaseDataRestPortalService(api);
   });
 

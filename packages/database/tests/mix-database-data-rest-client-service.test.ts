@@ -6,7 +6,7 @@ describe('MixDatabaseDataRestClientService', () => {
   let clientService: MixDatabaseDataRestClientService;
 
   beforeEach(() => {
-    api = new ApiService({ apiBaseUrl: 'http://localhost/api/' });
+    api = new ApiService({ apiBaseUrl: 'https://mixcore.net' });
     clientService = new MixDatabaseDataRestClientService(api);
   });
 
