@@ -17,7 +17,7 @@ export type ApiServiceHook = {
   onResponse?: (res: Response, req: RequestInit & { url: string }) => void | Promise<void>;
 };
 
-export class ApiService {
+export class ApiService implements ApiService {
   private config: ApiServiceConfig;
   private hooks: ApiServiceHook[] = [];
 
@@ -89,7 +89,7 @@ export class ApiService {
       }
       return { isSucceed: true, data: respData, status: res.status };
     } catch (err) {
-      return { isSucceed: false, errors: [(err as Error).message] };
+      throw err;
     }
   }
 

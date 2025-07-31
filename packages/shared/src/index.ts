@@ -1,10 +1,7 @@
 
 export * from './api-types';
-export { ApiService } from './api-types';
-export * from './file-types';
 export * from './common-services';
 export * from './crypto-services';
-export * from './file-services';
 export * from './global-settings-services';
 export * from './gpay-services';
 export * from './modal-nav-metas-service';
