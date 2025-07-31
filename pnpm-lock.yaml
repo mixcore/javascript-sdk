@@ -41,18 +41,9 @@ importers:
 
   packages/api:
     dependencies:
-      '@mixcore/file':
-        specifier: workspace:*
-        version: link:../file
       '@mixcore/shared':
         specifier: workspace:*
         version: link:../shared
-      '@mixcore/template':
-        specifier: workspace:*
-        version: link:../template
-      '@mixcore/user':
-        specifier: workspace:*
-        version: link:../user
 
   packages/base:
     dependencies:
@@ -62,6 +53,9 @@ importers:
 
   packages/config:
     dependencies:
+      '@mixcore/api':
+        specifier: workspace:*
+        version: link:../api
       '@mixcore/shared':
         specifier: workspace:*
         version: link:../shared

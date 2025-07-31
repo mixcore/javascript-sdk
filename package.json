@@ -8,8 +8,9 @@
   ],
   "scripts": {
     "build": "lerna run build --stream",
-    "test": "lerna run test --stream",
-    "lint": "lerna run lint --stream"
+    "test": "npm run build && lerna run test --stream",
+    "lint": "lerna run lint --stream",
+    "compile": "tsc --build tsconfig.base.json"
   },
   "devDependencies": {
     "@jest/types": "^30.0.0",

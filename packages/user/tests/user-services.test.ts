@@ -6,7 +6,7 @@ describe('UserServices', () => {
   let userServices: UserServices;
 
   beforeEach(() => {
-    api = new ApiService({ apiBaseUrl: 'http://localhost/api/' });
+    api = new ApiService({ apiBaseUrl: 'https://mixcore.net/api/' });
     userServices = new UserServices(api);
   });
 

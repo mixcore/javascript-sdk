@@ -7,14 +7,16 @@ export default {
       'ts-jest',
       {
         useESM: true,
-        tsconfig: 'tsconfig.base.json'
+        tsconfig: '<rootDir>/tsconfig.base.json'
       }
     ]
   },
   moduleNameMapper: {
-    '^@mixcore/(.*)$': '<rootDir>/packages/$1/src'
+    '^@mixcore/(.*)$': '<rootDir>/packages/$1/src',
+    '^(\\.{1,2}/.*)\\.js$': '$1'
   },
   transformIgnorePatterns: [
     'node_modules/(?!(.*\\.mjs$|@mixcore/.*))'
-  ]
+  ],
+  moduleFileExtensions: ['ts', 'js', 'json', 'node']
 };
