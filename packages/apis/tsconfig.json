@@ -5,7 +5,7 @@
     "rootDir": "src",
     "baseUrl": "src",
     "paths": {
-      "@mixcore/base": ["../../base/src/index"]
+      "@mixcore/base": ["../../base/dist/index"]
     }
   },
   "include": ["src/**/*"]

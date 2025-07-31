@@ -7,6 +7,7 @@ import { BaseRestService } from '@mixcore/base';
  * Endpoint: mix-database-data-association/form
  */
 export class RelatedAttributeDataRestFormService extends BaseRestService {
+  declare protected config: any;
   private readonly endpoint = 'mix-database-data-association/form';
 
   constructor(config: any) {

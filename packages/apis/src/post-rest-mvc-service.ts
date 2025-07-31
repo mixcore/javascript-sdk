@@ -7,6 +7,7 @@ import { BaseRestService } from '@mixcore/base';
  * Endpoint: mix-post/mvc
  */
 export class PostRestMvcService extends BaseRestService {
+  declare protected config: any;
   private readonly endpoint = 'mix-post/mvc';
 
   constructor(config: any) {
