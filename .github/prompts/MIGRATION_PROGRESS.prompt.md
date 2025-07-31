@@ -34,23 +34,23 @@ This document tracks the migration of all shared, base, and API modules from the
 ### User Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| user-services           | app-client/services/user-services.js                |   [ ]    |    [ ]     |    [ ]      | [ ]  |
+| user-services           | app-client/services/user-services.js                |   [x]    |    [x]     |    [x]      | [ ]  |
 
 ### Template Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| template-service        | app-portal/services/template-service.js              |   [ ]    |    [ ]     |    [ ]      | [ ]  |
+| template-service        | app-portal/services/template-service.js              |   [x]    |    [x]     |    [x]      | [ ]  |
 
 ### File Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
 | file-services           | app-shared/services/file-service.js                  |    [x]   |    [x]     |    [x]      | [ ]  |
-| file-services (portal)  | app-portal/pages/file/file-services.js              |   [ ]    |    [ ]     |    [ ]      | [ ]  |
+| file-services (portal)  | app-portal/pages/file/file-services.js              |   [x]    |    [x]     |    [x]      | [ ]  |
 
 ### Configuration Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| configuration-services  | app-portal/pages/configuration/configuration-services.js | [ ] |    [ ]     |    [ ]      | [ ]  |
+| configuration-services  | app-portal/pages/configuration/configuration-services.js | [x] |    [x]     |    [x]      | [ ]  |
 
 ### Navigation Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
@@ -60,12 +60,12 @@ This document tracks the migration of all shared, base, and API modules from the
 ### Database Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| mix-database-rest-portal-service | app-shared/services/mix-database/rest-portal-service.js | [ ] | [ ] | [ ] | [ ] |
-| mix-database-column-rest-service | app-shared/services/mix-database-column/rest-service.js | [ ] | [ ] | [ ] | [ ] |
-| mix-database-data-rest-client-service | app-shared/services/mix-database-data/rest-client-service.js | [ ] | [ ] | [ ] | [ ] |
-| mix-database-data-rest-portal-service | app-shared/services/mix-database-data/rest-portal-service.js | [ ] | [ ] | [ ] | [ ] |
-| mix-database-data-value-rest-service | app-shared/services/mix-database-data-value/rest-service.js | [ ] | [ ] | [ ] | [ ] |
-| module-data-rest-mvc-service | app-shared/services/module-data-service/rest-mvc-service.js | [ ] | [ ] | [ ] | [ ] |
+| mix-database-rest-portal-service | app-shared/services/mix-database/rest-portal-service.js | [x] | [x] | [x] | [ ] |
+| mix-database-column-rest-service | app-shared/services/mix-database-column/rest-service.js | [x] | [x] | [x] | [ ] |
+| mix-database-data-rest-client-service | app-shared/services/mix-database-data/rest-client-service.js | [x] | [x] | [x] | [ ] |
+| mix-database-data-rest-portal-service | app-shared/services/mix-database-data/rest-portal-service.js | [x] | [x] | [x] | [ ] |
+| mix-database-data-value-rest-service | app-shared/services/mix-database-data-value/rest-service.js | [x] | [x] | [x] | [ ] |
+| module-data-rest-mvc-service | app-shared/services/module-data-service/rest-mvc-service.js | [x] | [x] | [x] | [ ] |
 | post-rest-mvc-service | app-shared/services/post-service/rest-mvc-service.js | [ ] | [ ] | [ ] | [ ] |
 | related-attribute-data-rest-form-service | app-shared/services/related-attribute-data/rest-form-service.js | [ ] | [ ] | [ ] | [ ] |
 | related-attribute-data-rest-portal-service | app-shared/services/related-attribute-data/rest-portal-service.js | [ ] | [ ] | [ ] | [ ] |
