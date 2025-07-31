@@ -1,4 +1,4 @@
-import { ApiService } from './api-services';
+import { ApiService } from '../src/api-services';
 
 describe('ApiService', () => {
   const config = {

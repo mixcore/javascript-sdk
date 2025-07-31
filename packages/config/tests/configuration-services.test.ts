@@ -1,5 +1,5 @@
-import { ApiService } from './api-services';
-import { ConfigurationServices, ConfigurationUpload } from './configuration-services';
+import { ApiService } from '@mixcore/api';
+import { ConfigurationServices, ConfigurationUpload } from '../src/configuration-services';
 
 describe('ConfigurationServices', () => {
   let api: ApiService;

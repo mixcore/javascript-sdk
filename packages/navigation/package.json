@@ -7,7 +7,7 @@
   "description": "Navigation domain services for Mixcore SDK (framework-agnostic, TypeScript)",
   "scripts": {
     "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "lint": "eslint src --ext .ts"
   },
   "license": "SEE LICENSE IN LICENSE",

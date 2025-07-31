@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "description": "Configuration domain services for Mixcore SDK (framework-agnostic, TypeScript)",
   "scripts": {
     "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist",
@@ -11,7 +12,8 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "@mixcore/shared": "workspace:*"
+    "@mixcore/shared": "workspace:*",
+    "@mixcore/api": "workspace:*"
   },
   "license": "SEE LICENSE IN LICENSE",
   "repository": "https://github.com/mixcore/javascript-sdk",

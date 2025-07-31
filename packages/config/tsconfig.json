@@ -4,6 +4,11 @@
     "outDir": "dist",
     "rootDir": "./src"
   },
-  "include": ["src"],
-  "exclude": ["dist", "node_modules"]
+  "include": ["src", "tests"],
+  "exclude": ["dist", "node_modules"],
+  "compilerOptions": {
+    "paths": {
+      "@mixcore/*": ["../*/src"]
+    }
+  }
 }

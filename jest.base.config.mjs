@@ -2,20 +2,17 @@ export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
-  moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   transform: {
     '^.+\\.ts$': [
       'ts-jest',
       {
         useESM: true,
-        tsconfig: 'tsconfig.base.json',
+        tsconfig: 'tsconfig.base.json'
       }
     ]
   },
-  testMatch: ['**/tests/**/*.test.ts'],
   moduleNameMapper: {
-    '^@mixcore/(.*)$': '<rootDir>/packages/$1/src',
-    '^(\\.{1,2}/.*)\\.js$': '$1',
+    '^@mixcore/(.*)$': '<rootDir>/packages/$1/src'
   },
   transformIgnorePatterns: [
     'node_modules/(?!(.*\\.mjs$|@mixcore/.*))'
