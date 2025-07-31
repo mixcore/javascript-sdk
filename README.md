@@ -106,6 +106,20 @@ pnpm test
 
 Test coverage reports are generated in `coverage/` directory.
 
+## CI/CD Pipeline
+
+The SDK uses GitHub Actions for continuous integration and deployment:
+
+1. **Validate**: Runs linting and type checking
+2. **Test**: Runs unit tests with coverage reporting via Codecov
+3. **Publish**: Automatically publishes to npm on main branch merges
+
+### Publishing Requirements
+
+- All packages must pass tests with minimum 80% coverage
+- Version numbers must follow semantic versioning
+- NPM_TOKEN secret must be configured in GitHub
+
 ## Contributing
 
 Contributions welcome! Please see our [Contribution Guidelines](CONTRIBUTING.md).
