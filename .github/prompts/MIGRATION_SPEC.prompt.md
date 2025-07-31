@@ -17,13 +17,37 @@ Extract all "shared", "base", and "apis" JavaScript/TypeScript code from `@mixco
     ```
     mixcore/javascript-sdk/
     ├── packages/
-    │   ├── shared/      # Utilities, helpers, constants
-    │   ├── base/        # Base classes, abstract models, interfaces
-    │   └── apis/        # API clients, endpoint wrappers, schema types
-    ├── tests/           # Cross-package/unit/integration tests
+    │   ├── user/         # User domain services and API clients
+    │   │   ├── src/
+    │   │   └── tests/
+    │   ├── template/     # Template domain services and API clients
+    │   │   ├── src/
+    │   │   └── tests/
+    │   ├── file/         # File domain services and API clients
+    │   │   ├── src/
+    │   │   └── tests/
+    │   ├── config/       # Configuration domain services
+    │   │   ├── src/
+    │   │   └── tests/
+    │   ├── navigation/   # Navigation domain services
+    │   │   ├── src/
+    │   │   └── tests/
+    │   ├── database/     # Database and attribute services
+    │   │   ├── src/
+    │   │   └── tests/
+    │   ├── shared/       # Shared utilities, helpers, constants
+    │   │   ├── src/
+    │   │   └── tests/
+    │   ├── base/         # Base classes, abstract models, interfaces
+    │   │   ├── src/
+    │   │   └── tests/
+    │   ├── api/          # API bootstrap, core API clients, SDK entrypoint
+    │   │   ├── src/
+    │   │   └── tests/
+    ├── tests/            # Cross-package/unit/integration tests
     ├── README.md
     ├── package.json
-    └── nx.json / lerna.json (if using monorepo tool)
+    └── nx.json / lerna.json / pnpm-workspace.yaml (if using monorepo tool)
     ```
 - Prefer TypeScript for new code; convert JS to TS where feasible.
 

@@ -18,9 +18,9 @@ This document tracks the migration of all shared, base, and API modules from the
 ## 1. Core Migration Steps (Platform & Domain-Driven)
 - [x] Monorepo structure created (Lerna/PNPM workspaces)
 - [x] TypeScript, Jest, and build tooling configured
-- [x] Packages scaffolded: `shared`, `base`, `apis`
+- [x] Packages scaffolded: `user`, `template`, `file`, `config`, `navigation`, `database`, `shared`, `base`, `api`
 - [x] Initial code audit and mapping
-- [ ] Domain-driven package reorganization (User, Template, File, Config, Database, etc.)
+- [~] Domain-driven package reorganization (User, Template, File, Config, Database, etc.)
 - [ ] SDK bootstrap/config entrypoint (`createMixcoreSdk(config)`) implemented
 - [ ] Plugin/adapter interface defined and documented
 - [ ] OpenAPI codegen adopted for REST API clients (if OpenAPI specs exist)

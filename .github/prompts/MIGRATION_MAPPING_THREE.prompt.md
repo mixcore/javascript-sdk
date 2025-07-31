@@ -26,9 +26,9 @@ This document provides a detailed mapping and progress tracker for the migration
 ## 1. Core Migration Steps (Platform & Domain-Driven)
 - [x] Monorepo structure created (Lerna/PNPM workspaces)
 - [x] TypeScript, Jest, and build tooling configured
-- [x] Packages scaffolded: `shared`, `base`, `apis`
+- [x] Packages scaffolded: `user`, `template`, `file`, `config`, `navigation`, `database`, `shared`, `base`, `api`
 - [x] Initial code audit and mapping
-- [ ] Domain-driven package reorganization (User, Template, File, Config, Database, etc.)
+- [~] Domain-driven package reorganization (User, Template, File, Config, Database, etc.)
 - [ ] SDK bootstrap/config entrypoint (`createMixcoreSdk(config)`) implemented
 - [ ] Plugin/adapter interface defined and documented
 - [ ] OpenAPI codegen adopted for REST API clients (if OpenAPI specs exist)
@@ -42,77 +42,77 @@ This document provides a detailed mapping and progress tracker for the migration
 ### User Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| user-services           | app-client/services/user-services.js                |   [x]    |    [x]     |    [x]      | [ ]  |
+| user-services           | .legacy/app-client/services/user-services.js        |   [x]    |    [x]     |    [x]      | [ ]  |
 
 ### Template Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| template-service        | app-portal/services/template-service.js              |   [x]    |    [x]     |    [x]      | [ ]  |
+| template-service        | .legacy/app-portal/services/template-service.js     |   [x]    |    [x]     |    [x]      | [ ]  |
 
 ### File Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| file-services           | app-shared/services/file-service.js                  |    [x]   |    [x]     |    [x]      | [ ]  |
-| file-services (portal)  | app-portal/pages/file/file-services.js              |   [x]    |    [x]     |    [x]      | [ ]  |
+| file-services           | .legacy/app-shared/services/file-service.js         |    [x]   |    [x]     |    [x]      | [ ]  |
+| file-services (portal)  | .legacy/app-portal/pages/file/file-services.js      |   [x]    |    [x]     |    [x]      | [ ]  |
 
 ### Configuration Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| configuration-services  | app-portal/pages/configuration/configuration-services.js | [x] |    [x]     |    [x]      | [ ]  |
+| configuration-services  | .legacy/app-portal/pages/configuration/configuration-services.js | [x] |    [x]     |    [x]      | [ ]  |
 
 ### Navigation Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| rest-navigation-service | app-client/services/rest-navigation-service.js      |   [ ]    |    [ ]     |    [ ]      | [ ]  |
+| rest-navigation-service | .legacy/app-client/services/rest-navigation-service.js |   [ ]    |    [ ]     |    [ ]      | [ ]  |
 
 ### Database Domain
 | Module                  | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| mix-database-rest-portal-service | app-shared/services/mix-database/rest-portal-service.js | [x] | [x] | [x] | [ ] |
-| mix-database-column-rest-service | app-shared/services/mix-database-column/rest-service.js | [x] | [x] | [x] | [ ] |
-| mix-database-data-rest-client-service | app-shared/services/mix-database-data/rest-client-service.js | [x] | [x] | [x] | [ ] |
-| mix-database-data-rest-portal-service | app-shared/services/mix-database-data/rest-portal-service.js | [x] | [x] | [x] | [ ] |
-| mix-database-data-value-rest-service | app-shared/services/mix-database-data-value/rest-service.js | [x] | [x] | [x] | [ ] |
-| module-data-rest-mvc-service | app-shared/services/module-data-service/rest-mvc-service.js | [x] | [x] | [x] | [ ] |
-| post-rest-mvc-service | app-shared/services/post-service/rest-mvc-service.js | [ ] | [ ] | [ ] | [ ] |
-| post-rest-mvc-service | app-shared/services/post-service/rest-mvc-service.js | [x] | [x] | [x] | [ ] |
-| related-attribute-data-rest-form-service | app-shared/services/related-attribute-data/rest-form-service.js | [ ] | [ ] | [ ] | [ ] |
-| related-attribute-data-rest-form-service | app-shared/services/related-attribute-data/rest-form-service.js | [x] | [x] | [x] | [ ] |
-| related-attribute-data-rest-portal-service | app-shared/services/related-attribute-data/rest-portal-service.js | [ ] | [ ] | [ ] | [ ] |
-| related-attribute-data-rest-portal-service | app-shared/services/related-attribute-data/rest-portal-service.js | [x] | [x] | [x] | [ ] |
-| related-attribute-set-rest-portal-service | app-shared/services/related-attribute-set/rest-portal-service.js | [ ] | [ ] | [ ] | [ ] |
-| related-attribute-set-rest-portal-service | app-shared/services/related-attribute-set/rest-portal-service.js | [x] | [x] | [x] | [ ] |
+| mix-database-rest-portal-service | .legacy/app-shared/services/mix-database/rest-portal-service.js | [x] | [x] | [x] | [ ] |
+| mix-database-column-rest-service | .legacy/app-shared/services/mix-database-column/rest-service.js | [x] | [x] | [x] | [ ] |
+| mix-database-data-rest-client-service | .legacy/app-shared/services/mix-database-data/rest-client-service.js | [x] | [x] | [x] | [ ] |
+| mix-database-data-rest-portal-service | .legacy/app-shared/services/mix-database-data/rest-portal-service.js | [x] | [x] | [x] | [ ] |
+| mix-database-data-value-rest-service | .legacy/app-shared/services/mix-database-data-value/rest-service.js | [x] | [x] | [x] | [ ] |
+| module-data-rest-mvc-service | .legacy/app-shared/services/module-data-service/rest-mvc-service.js | [x] | [x] | [x] | [ ] |
+| post-rest-mvc-service | .legacy/app-shared/services/post-service/rest-mvc-service.js | [ ] | [ ] | [ ] | [ ] |
+| post-rest-mvc-service | .legacy/app-shared/services/post-service/rest-mvc-service.js | [x] | [x] | [x] | [ ] |
+| related-attribute-data-rest-form-service | .legacy/app-shared/services/related-attribute-data/rest-form-service.js | [ ] | [ ] | [ ] | [ ] |
+| related-attribute-data-rest-form-service | .legacy/app-shared/services/related-attribute-data/rest-form-service.js | [x] | [x] | [x] | [ ] |
+| related-attribute-data-rest-portal-service | .legacy/app-shared/services/related-attribute-data/rest-portal-service.js | [ ] | [ ] | [ ] | [ ] |
+| related-attribute-data-rest-portal-service | .legacy/app-shared/services/related-attribute-data/rest-portal-service.js | [x] | [x] | [x] | [ ] |
+| related-attribute-set-rest-portal-service | .legacy/app-shared/services/related-attribute-set/rest-portal-service.js | [ ] | [ ] | [ ] | [ ] |
+| related-attribute-set-rest-portal-service | .legacy/app-shared/services/related-attribute-set/rest-portal-service.js | [x] | [x] | [x] | [ ] |
 
 ### Shared/Core Domain
 | Module                        | Legacy Path                                                      | Migrated | Refactored | Unit Tested | Docs |
 |-------------------------------|------------------------------------------------------------------|----------|------------|-------------|------|
-| common-services               | app-shared/services/common-services.js                           |    [x]   |    [x]     |    [x]      | [ ]  |
-| crypto-services               | app-shared/services/crypto-services.js                           |    [x]   |    [x]     |    [x]      | [ ]  |
-| gpay-services                 | app-shared/services/gpay-services.js                             |    [x]   |    [x]     |    [x]      | [ ]  |
-| translator-services           | app-shared/services/translator-services.js                       |    [x]   |    [x]     |    [x]      | [ ]  |
-| global-settings-services      | app-shared/services/global-settings-services.js                  |    [x]   |    [x]     |    [x]      | [ ]  |
-| theme-services                | app-shared/services/theme-services.js                            |    [x]   |    [x]     |    [x]      | [ ]  |
-| store-services                | app-shared/services/store-services.js                            |    [x]   |    [x]     |    [x]      | [ ]  |
-| shared-module-data-services   | app-shared/components/module-data/shared-module-data-services.js |    [x]   |    [x]     |    [x]      | [ ]  |
-| modal-nav-metas-service       | app-portal/components/modal-nav-metas/script.js                  |    [x]   |    [x]     |    [x]      | [ ]  |
-| shared global.js              | app-portal/shared/global.js                                      |   [x]    |    [x]     |    [x]      | [ ]  |
+| common-services               | .legacy/app-shared/services/common-services.js                   |    [x]   |    [x]     |    [x]      | [ ]  |
+| crypto-services               | .legacy/app-shared/services/crypto-services.js                   |    [x]   |    [x]     |    [x]      | [ ]  |
+| gpay-services                 | .legacy/app-shared/services/gpay-services.js                     |    [x]   |    [x]     |    [x]      | [ ]  |
+| translator-services           | .legacy/app-shared/services/translator-services.js               |    [x]   |    [x]     |    [x]      | [ ]  |
+| global-settings-services      | .legacy/app-shared/services/global-settings-services.js          |    [x]   |    [x]     |    [x]      | [ ]  |
+| theme-services                | .legacy/app-shared/services/theme-services.js                    |    [x]   |    [x]     |    [x]      | [ ]  |
+| store-services                | .legacy/app-shared/services/store-services.js                    |    [x]   |    [x]     |    [x]      | [ ]  |
+| shared-module-data-services   | .legacy/app-shared/components/module-data/shared-module-data-services.js |    [x]   |    [x]     |    [x]      | [ ]  |
+| modal-nav-metas-service       | .legacy/app-portal/components/modal-nav-metas/script.js          |    [x]   |    [x]     |    [x]      | [ ]  |
+| shared global.js              | .legacy/app-portal/shared/global.js                              |   [x]    |    [x]     |    [x]      | [ ]  |
 
 ### Base Abstractions
 | Module             | Legacy Path                                   | Migrated | Refactored | Unit Tested | Docs |
 |--------------------|-----------------------------------------------|----------|------------|-------------|------|
-| base-service       | app-shared/services/base-service.js           |    [x]   |    [x]     |    [x]      | [ ]  |
-| base-rest-service  | app-shared/services/base-rest-service.js      |    [x]   |    [x]     |    [x]      | [ ]  |
+| base-service       | .legacy/app-shared/services/base-service.js           |    [x]   |    [x]     |    [x]      | [ ]  |
+| base-rest-service  | .legacy/app-shared/services/base-rest-service.js      |    [x]   |    [x]     |    [x]      | [ ]  |
 
 ### API Clients
 | Module                   | Legacy Path                                         | Migrated | Refactored | Unit Tested | Docs |
 |--------------------------|-----------------------------------------------------|----------|------------|-------------|------|
-| api-services             | app-shared/services/api-services.js                 |    [x]   |    [x]     |    [x]      | [ ]  |
-| auth-services            | app-shared/services/auth-services.js                |    [x]   |    [x]     |    [x]      | [ ]  |
-| module-article-services  | app-portal/pages/module-post/module-article-services.js | [x]   |    [x]     |    [x]      | [ ]  |
-| module-data-services     | app-portal/pages/module-data/module-data-services.js |    [x]   |    [x]     |    [x]      | [ ]  |
-| module-gallery-services  | app-portal/pages/module-gallery/module-gallery-services.js | [x] |    [x]     |    [x]      | [ ]  |
-| theme-services (API)     | app-shared/services/theme-services.js               |    [x]   |    [x]     |    [x]      | [ ]  |
-| store-services (API)     | app-shared/services/store-services.js               |    [x]   |    [x]     |    [x]      | [ ]  |
+| api-services             | .legacy/app-shared/services/api-services.js         |    [x]   |    [x]     |    [x]      | [ ]  |
+| auth-services            | .legacy/app-shared/services/auth-services.js        |    [x]   |    [x]     |    [x]      | [ ]  |
+| module-article-services  | .legacy/app-portal/pages/module-post/module-article-services.js | [x]   |    [x]     |    [x]      | [ ]  |
+| module-data-services     | .legacy/app-portal/pages/module-data/module-data-services.js |    [x]   |    [x]     |    [x]      | [ ]  |
+| module-gallery-services  | .legacy/app-portal/pages/module-gallery/module-gallery-services.js | [x] |    [x]     |    [x]      | [ ]  |
+| theme-services (API)     | .legacy/app-shared/services/theme-services.js       |    [x]   |    [x]     |    [x]      | [ ]  |
+| store-services (API)     | .legacy/app-shared/services/store-services.js       |    [x]   |    [x]     |    [x]      | [ ]  |
 
 ---
 
