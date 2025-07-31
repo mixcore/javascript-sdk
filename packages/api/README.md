@@ -9,6 +9,8 @@ API clients and endpoint wrappers for Mixcore SDK. Provides typed HTTP clients f
 - Built-in error handling
 - Support for authentication headers
 - Promise-based async operations
+- Secure configuration injection
+- Framework-agnostic implementation
 
 ## Installation
 
@@ -27,50 +29,56 @@ import { ApiService } from '@mixcore/api';
 
 const api = new ApiService({
   apiBaseUrl: 'https://api.mixcore.net',
-  apiKey: 'your-api-key' // optional
+  apiKey: process.env.MIXCORE_API_KEY // Never hardcode secrets!
 });
 
 // Make API requests
 const response = await api.get('/some-endpoint');
 ```
 
-### Configuration Options
-
-| Option | Type | Description |
-|--------|------|-------------|
-| apiBaseUrl | string | Base URL for API requests |
-| apiKey? | string | API key for authentication |
-| timeout? | number | Request timeout in ms |
-
-### Authentication
+### SDK Entrypoint
 
 ```typescript
-// With API key
-const api = new ApiService({
-  apiBaseUrl: 'https://api.mixcore.net',
-  apiKey: 'your-api-key-here'
-});
+import { createMixcoreSdk } from '@mixcore/api';
 
-// Requests will include Authorization: Bearer header
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: 'https://api.mixcore.net' },
+  {
+    api: new ApiService({ apiBaseUrl: 'https://api.mixcore.net' })
+  }
+);
 ```
 
-## Error Handling
+### Configuration Options
 
-The API client throws structured errors for:
+| Option | Type | Required | Description |
+|--------|------|----------|-------------|
+| apiBaseUrl | string | Yes | Base URL for API requests |
+| apiKey? | string | No | API key for authentication |
+| timeout? | number | No | Request timeout in ms |
 
-- Network failures
-- Invalid responses (non-2xx status codes)
-- Timeouts
+### Security Note
 
-```typescript
-try {
-  await api.get('/some-endpoint');
-} catch (error) {
-  console.error('API request failed:', error.message);
-  if (error.response) {
-    console.error('Status:', error.response.status);
-  }
-}
+- Never hardcode API keys or secrets in your code
+- Always inject configuration at runtime
+- Use environment variables for sensitive values
+
+## API Reference
+
+### ApiService Methods
+
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| get | `endpoint: string`, `params?: Record<string, any>` | `Promise<ApiResult>` | Makes GET request |
+| post | `endpoint: string`, `data: any`, `options?: { isFormData?: boolean }` | `Promise<ApiResult>` | Makes POST request |
+| delete | `endpoint: string` | `Promise<ApiResult>` | Makes DELETE request |
+
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
 ```
 
 ## Related Packages

@@ -9,6 +9,7 @@ Configuration management services for Mixcore SDK. Provides loading, validation 
 - Schema validation
 - Environment variable support
 - Hot-reloading for development
+- Secure by design: Prevents hardcoded secrets
 
 ## Installation
 
@@ -27,47 +28,51 @@ import { ConfigurationServices } from '@mixcore/config';
 
 const configService = new ConfigurationServices();
 
-// Load config from default location
-const config = await configService.loadConfiguration();
+// Load config from environment variables
+const config = await configService.loadConfiguration({
+  apiBaseUrl: process.env.MIXCORE_API_URL,
+  apiKey: process.env.MIXCORE_API_KEY // Never hardcode secrets!
+});
 
 // Access config values
 console.log(config.apiBaseUrl);
 ```
 
-### Custom Configuration Path
+### Security Best Practices
 
-```typescript
-const config = await configService.loadConfiguration('/path/to/config.json');
-```
-
-### Environment Variables
-
-Configuration values can be overridden by environment variables prefixed with `MIXCORE_`:
-
-```bash
-MIXCORE_API_BASE_URL=https://api.mixcore.net npm start
-```
+- Never commit configuration files with secrets
+- Use environment variables for sensitive values
+- Validate configuration schema in production
+- Rotate secrets regularly
 
 ## Configuration Schema
 
-The expected configuration format:
-
 ```typescript
 interface AppConfig {
-  apiBaseUrl: string;
-  apiKey?: string;
-  debug?: boolean;
+  apiBaseUrl: string; // Required
+  apiKey?: string; // Optional
+  debug?: boolean; // Optional
   // ...other app-specific settings
 }
 ```
 
 ## API Reference
 
-| Method | Description |
-|--------|-------------|
-| `loadConfiguration(path?)` | Loads and validates config |
-| `getConfig()` | Returns current config |
-| `watchForChanges()` | Enables hot-reloading |
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| loadConfiguration | `config?: Partial<AppConfig>` | `Promise<AppConfig>` | Loads and validates config |
+| getConfig | None | `AppConfig` | Returns current config |
+| watchForChanges | None | `void` | Enables hot-reloading |
+
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
+```
+
+See test files in `tests/` directory for implementation details.
 
 ## Related Packages
 

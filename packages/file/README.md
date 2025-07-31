@@ -9,6 +9,7 @@ File handling utilities for Mixcore SDK. Provides services for file uploads, dow
 - Progress tracking
 - TypeScript types for file operations
 - Framework-agnostic implementation
+- Secure configuration injection
 
 ## Installation
 
@@ -24,45 +25,48 @@ pnpm add @mixcore/file
 
 ```typescript
 import { FileServices } from '@mixcore/file';
+import { ApiService } from '@mixcore/api';
 
-const fileService = new FileServices();
+const fileService = new FileServices({
+  api: new ApiService({
+    apiBaseUrl: process.env.MIXCORE_API_URL, // Never hardcode URLs!
+    apiKey: process.env.MIXCORE_API_KEY // Never hardcode secrets!
+  })
+});
 
 // Upload a file
 await fileService.uploadFile(file, {
   onProgress: (progress) => console.log(`Uploaded ${progress}%`)
 });
-
-// Download a file
-const downloaded = await fileService.downloadFile('file-id');
 ```
 
-### Supported File Types
+### Security Note
 
-- Images (PNG, JPG, GIF, SVG)
-- Documents (PDF, DOCX, XLSX)
-- Archives (ZIP)
-- Text files
+- Never hardcode API endpoints or credentials
+- Always inject configuration at runtime
+- Validate file types and sizes before processing
+- Use environment variables for sensitive values
 
 ## API Reference
 
-| Method | Description |
-|--------|-------------|
-| `uploadFile(file, options)` | Uploads file with progress tracking |
-| `downloadFile(id)` | Downloads file by ID |
-| `getFileMetadata(id)` | Gets file metadata |
-| `deleteFile(id)` | Deletes file |
+### FileServices Methods
 
-## Error Handling
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| uploadFile | `file: File`, `options?: UploadOptions` | `Promise<FileUploadResult>` | Uploads file with progress tracking |
+| downloadFile | `id: string` | `Promise<Blob>` | Downloads file by ID |
+| getFileMetadata | `id: string` | `Promise<FileMetadata>` | Gets file metadata |
+| deleteFile | `id: string` | `Promise<void>` | Deletes file |
 
-```typescript
-try {
-  await fileService.uploadFile(file);
-} catch (error) {
-  if (error.name === 'FileTooLargeError') {
-    console.error('File exceeds maximum size');
-  }
-}
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
 ```
+
+See test files in `tests/` directory for implementation details.
 
 ## Related Packages
 

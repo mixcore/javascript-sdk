@@ -10,6 +10,8 @@ Modular, framework-agnostic SDK for Mixcore projects. Built with TypeScript and 
 - **TypeScript-first**: Full type safety and autocompletion
 - **Framework-agnostic**: Works with any JavaScript framework
 - **Production-ready**: Well-tested and documented
+- **Secure by design**: Configuration injection prevents hardcoded secrets
+- **Extensible**: Plugin/adapter architecture for custom implementations
 
 ## Packages
 
@@ -32,17 +34,48 @@ Modular, framework-agnostic SDK for Mixcore projects. Built with TypeScript and 
 npm install @mixcore/api @mixcore/database # or whichever packages you need
 ```
 
-### Usage Example
+### SDK Initialization
 
 ```typescript
+import { createMixcoreSdk } from '@mixcore/api';
 import { ApiService } from '@mixcore/api';
 import { ModuleDataService } from '@mixcore/database';
 
-const api = new ApiService({ apiBaseUrl: 'https://api.mixcore.net' });
-const dataService = new ModuleDataService({ api });
+// Initialize SDK with configuration
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: 'https://api.mixcore.net' },
+  {
+    api: new ApiService({ apiBaseUrl: 'https://api.mixcore.net' }),
+    database: new ModuleDataService({ api: new ApiService({ apiBaseUrl: 'https://api.mixcore.net' }) })
+    // Add other domain services as needed
+  }
+);
 
-// Use services...
+// Use services through SDK instance
+const data = await sdk.database.fetchDataItems('module-id');
 ```
+
+### Security Note
+
+- Never hardcode secrets in your application
+- Always inject configuration (API keys, URLs) at runtime
+- Use environment variables for sensitive values
+
+## API Reference
+
+### Core SDK Methods
+
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| `createMixcoreSdk` | `config: MixcoreSdkConfig`, `services: MixcoreSdkOptions` | `MixcoreSdkInstance` | Creates configured SDK instance |
+
+### Configuration Options
+
+| Option | Type | Required | Description |
+|--------|------|----------|-------------|
+| `apiBaseUrl` | string | Yes | Base URL for API requests |
+| `apiKey` | string | No | API key for authentication |
+| `timeout` | number | No | Request timeout in ms |
 
 ## Development
 
@@ -70,6 +103,8 @@ pnpm build
 ```bash
 pnpm test
 ```
+
+Test coverage reports are generated in `coverage/` directory.
 
 ## Contributing
 

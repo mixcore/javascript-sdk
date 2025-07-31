@@ -8,6 +8,7 @@ Database domain services and types for Mixcore SDK. Provides data access, queryi
 - TypeScript interfaces for database models
 - Data validation and transformation
 - Modular service architecture
+- Secure configuration injection
 
 ## Installation
 
@@ -22,25 +23,51 @@ pnpm add @mixcore/database
 ### Basic Example
 
 ```typescript
+import { createMixcoreSdk } from '@mixcore/api';
 import { ModuleDataService } from '@mixcore/database';
-import { ApiService } from '@mixcore/api';
 
-const api = new ApiService({ apiBaseUrl: 'https://api.mixcore.net' });
-const dataService = new ModuleDataService({ api });
+const sdk = createMixcoreSdk(
+  { apiBaseUrl: 'https://api.mixcore.net' },
+  {
+    database: new ModuleDataService({
+      api: new ApiService({
+        apiBaseUrl: 'https://api.mixcore.net',
+        apiKey: process.env.MIXCORE_API_KEY // Never hardcode secrets!
+      })
+    })
+  }
+);
 
 // Fetch data items
-const result = await dataService.fetchDataItems('module-id');
+const result = await sdk.database.fetchDataItems('module-id');
 ```
 
-### Services
+### Security Note
 
-- `ModuleDataService`: Core data operations
-- `MixDatabaseDataRestPortalService`: Portal-specific data services
-- `RelatedAttributeDataRestPortalService`: Related attribute services
+- Never hardcode API keys or secrets
+- Always inject configuration at runtime
+- Use environment variables for sensitive values
 
 ## API Reference
 
-See [API Documentation](API.md) for detailed method signatures and types.
+### ModuleDataService Methods
+
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| fetchDataItems | `moduleId: string`, `options?: FetchOptions` | `Promise<DataItem[]>` | Fetches data items for module |
+| createDataItem | `moduleId: string`, `data: DataItem` | `Promise<DataItem>` | Creates new data item |
+| updateDataItem | `moduleId: string`, `id: string`, `data: Partial<DataItem>` | `Promise<DataItem>` | Updates existing data item |
+| deleteDataItem | `moduleId: string`, `id: string` | `Promise<void>` | Deletes data item |
+
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
+```
+
+See individual test files in `tests/` directory for implementation details.
 
 ## Related Packages
 

@@ -8,6 +8,7 @@ Mixcore SDK base abstractions. Provides core TypeScript classes and interfaces f
 - **BaseRestService**: REST API client base class
 - **Injectable configuration**: Flexible service configuration
 - **Framework-agnostic**: No UI/SPA dependencies
+- **Secure by design**: Configuration injection prevents hardcoded secrets
 
 ## Installation
 
@@ -37,39 +38,39 @@ class MyService extends BaseService {
 }
 ```
 
-### Using BaseRestService
+### Security Note
 
-```typescript
-import { BaseRestService } from '@mixcore/base';
-
-class MyRestService extends BaseRestService {
-  constructor(baseUrl: string) {
-    super({ apiBaseUrl: baseUrl });
-  }
-
-  async fetchItems() {
-    return this.get('/items');
-  }
-}
-```
+- Never hardcode secrets in configuration
+- Always inject configuration at runtime
+- Use environment variables for sensitive values
 
 ## API Reference
 
-### BaseService
+### BaseService Methods
 
-| Method | Description |
-|--------|-------------|
-| `execute(fn)` | Wraps operations with error handling |
-| `getConfig()` | Returns current configuration |
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| execute | `fn: () => Promise<T>` | `Promise<T>` | Wraps operations with error handling |
+| getConfig | None | `ConfigType` | Returns current configuration |
 
-### BaseRestService
+### BaseRestService Methods
 
-| Method | Description |
-|--------|-------------|
-| `get(path)` | Makes GET request |
-| `post(path, data)` | Makes POST request |
-| `put(path, data)` | Makes PUT request |
-| `delete(path)` | Makes DELETE request |
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| get | `path: string`, `params?: Record<string, any>` | `Promise<ApiResult>` | Makes GET request |
+| post | `path: string`, `data: any`, `options?: { isFormData?: boolean }` | `Promise<ApiResult>` | Makes POST request |
+| put | `path: string`, `data: any` | `Promise<ApiResult>` | Makes PUT request |
+| delete | `path: string` | `Promise<ApiResult>` | Makes DELETE request |
+
+## Testing
+
+Test coverage reports are generated in `coverage/` directory when running:
+
+```bash
+pnpm test
+```
+
+See test files in `tests/` directory for implementation details.
 
 ## Related Packages
 
