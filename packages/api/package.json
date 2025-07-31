@@ -11,7 +11,7 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "@mixcore/config": "workspace:*",
+    "@mixcore/shared": "workspace:*",
     "@mixcore/file": "workspace:*",
     "@mixcore/template": "workspace:*",
     "@mixcore/user": "workspace:*"

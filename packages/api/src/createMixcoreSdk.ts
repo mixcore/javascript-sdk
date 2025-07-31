@@ -3,6 +3,7 @@
 import { ApiService } from './api-services';
 import { UserServices } from '@mixcore/user';
 import { TemplateService } from '@mixcore/template';
+import { FileServices } from '@mixcore/shared';
 import { FileServicesPortal } from '@mixcore/file';
 import { ConfigurationServices } from '@mixcore/config';
 // ...import other domain services as needed

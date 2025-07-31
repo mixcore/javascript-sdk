@@ -1,6 +1,7 @@
 import { ApiService } from '@mixcore/api';
+import type { FileServices } from '@mixcore/shared';
 
-export class FileServicesPortal {
+export class FileServicesPortal implements FileServices {
   private api: ApiService;
   private prefixUrl = '/file/';
 

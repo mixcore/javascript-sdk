@@ -1,4 +1,6 @@
 
+export * from './api-types';
+export * from './file-types';
 export * from './common-services';
 export * from './crypto-services';
 export * from './file-services';

@@ -1,29 +1,8 @@
-/**
- * Generic API result type for Mixcore SDK
- *
- * @remarks
- * Used for all API responses. Extend or narrow as needed per endpoint.
- * @public
- */
-export interface ApiResult {
-  /** Indicates if the API call was successful */
-  isSucceed: boolean;
-  /** Response data, if any */
-  data?: any;
-  /** Error messages, if any */
-  errors?: string[];
-  /** Additional fields for extensibility */
-  [key: string]: any;
-}
+import type { ApiServiceConfig } from '@mixcore/shared';
+import type { ApiResult, RestApiResult } from '@mixcore/shared';
 
-/**
- * REST API result type for Mixcore SDK
- *
- * @remarks
- * Used for RESTful API responses. Inherits from ApiResult.
- * @public
- */
-export interface RestApiResult extends ApiResult {}
+export type { ApiResult, RestApiResult };
+
 /**
  * ApiService
  * Framework-agnostic, TypeScript-native API client for Mixcore
@@ -32,11 +11,6 @@ export interface RestApiResult extends ApiResult {}
  * Refactored from legacy AngularJS service. All SPA dependencies removed.
  * Configuration is injected via constructor.
  */
-export interface ApiServiceConfig {
-  apiBaseUrl: string;
-  apiKey?: string;
-  [key: string]: any;
-}
 
 export type ApiServiceHook = {
   onRequest?: (req: RequestInit & { url: string }) => void | Promise<void>;
