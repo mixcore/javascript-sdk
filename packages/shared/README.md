@@ -1,18 +1,76 @@
-
 # @mixcore/shared
 
-Mixcore SDK shared utilities and helpers. Provides stateless TypeScript functions, constants, and cross-domain helpers for all SDK packages.
+Shared utilities and helpers for Mixcore SDK. Provides stateless TypeScript functions, constants and cross-domain helpers.
+
+## Features
+
+- **Utilities**: Common functions for crypto, translation, files, etc.
+- **Constants**: Shared configuration values and defaults
+- **Helpers**: Cross-cutting concerns and utilities
+- **Framework-agnostic**: No UI/SPA dependencies
+- **TypeScript-first**: Full type safety
+
+## Installation
+
+```bash
+npm install @mixcore/shared
+# or
+pnpm add @mixcore/shared
+```
 
 ## Usage
 
-```ts
-import { loadFacebookSdk } from '@mixcore/shared';
+### Utility Functions
+
+```typescript
+import {
+  formatCurrency,
+  generateId,
+  encryptData
+} from '@mixcore/shared';
+
+// Format money value
+const formatted = formatCurrency(1234.56, 'USD');
+
+// Generate unique ID
+const id = generateId();
+
+// Encrypt sensitive data
+const encrypted = encryptData('secret', 'my-key');
 ```
 
-## Features
-- Utilities for crypto, translation, file, and more
-- No SPA/UI dependencies
-- Framework-agnostic
+### Constants
+
+```typescript
+import { DEFAULT_CONFIG } from '@mixcore/shared';
+
+console.log(DEFAULT_CONFIG.apiBaseUrl);
+```
+
+## API Reference
+
+### Utility Functions
+
+| Function | Description |
+|----------|-------------|
+| `formatCurrency()` | Formats money values |
+| `generateId()` | Generates unique IDs |
+| `encryptData()` | Encrypts sensitive data |
+| `translate()` | Localization helper |
+
+### Constants
+
+| Constant | Description |
+|----------|-------------|
+| `DEFAULT_CONFIG` | Default configuration values |
+| `SUPPORTED_LOCALES` | Available languages |
+| `FILE_TYPES` | Supported file formats |
+
+## Related Packages
+
+- [@mixcore/api](https://github.com/mixcore/javascript-sdk/tree/main/packages/api): API client using these utilities
+- [@mixcore/config](https://github.com/mixcore/javascript-sdk/tree/main/packages/config): Configuration management
 
 ## License
-SEE LICENSE IN LICENSE
+
+Mixcore Community License (MCL). See [LICENSE](../../LICENSE) for details.
