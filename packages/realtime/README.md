@@ -1,10 +1,10 @@
-# @mixcore/signalr
+# @mixcore/realtime
 
-SignalR real-time communication services for Mixcore SDK.
+Real-time communication services for Mixcore SDK.
 
 ## Features
 
-- **Real-time Communication**: Full SignalR client implementation with connection management
+- **Real-time Communication**: Full real-time client implementation with connection management
 - **Type Safety**: Complete TypeScript support with strongly typed interfaces
 - **Chat Services**: High-level chat service abstraction for common messaging patterns
 - **Connection Management**: Automatic reconnection, state management, and error handling
@@ -14,19 +14,19 @@ SignalR real-time communication services for Mixcore SDK.
 ## Installation
 
 ```bash
-npm install @mixcore/signalr
+npm install @mixcore/realtime
 # or
-yarn add @mixcore/signalr
+yarn add @mixcore/realtime
 # or
-pnpm add @mixcore/signalr
+pnpm add @mixcore/realtime
 ```
 
 ## Usage
 
-### Basic SignalR Service
+### Basic Real-time Service
 
 ```typescript
-import { SignalRService } from '@mixcore/signalr';
+import { SignalRService } from '@mixcore/realtime';
 
 const service = new SignalRService({
   hubUrl: 'https://your-hub-url/hub',
@@ -51,7 +51,7 @@ await service.invoke('SendMessage', 'Hello World');
 ### Chat Service
 
 ```typescript
-import { ChatService } from '@mixcore/signalr';
+import { ChatService } from '@mixcore/realtime';
 
 const chatService = new ChatService({
   baseUrl: 'https://your-api-url',
@@ -77,13 +77,13 @@ chatService.onMessageReceived((message) => {
 
 ### SignalRService
 
-Main service class for SignalR connections.
+Main service class for real-time connections.
 
 #### Constructor Options
 
-- `hubUrl`: SignalR hub URL
+- `hubUrl`: Real-time hub URL
 - `accessTokenFactory`: Function that returns the access token
-- `logLevel`: SignalR logging level (optional)
+- `logLevel`: Connection logging level (optional)
 - `automaticReconnect`: Enable automatic reconnection (default: true)
 - `onConnected`: Connection established callback
 - `onDisconnected`: Connection lost callback
@@ -93,8 +93,8 @@ Main service class for SignalR connections.
 
 #### Methods
 
-- `start()`: Start the SignalR connection
-- `stop()`: Stop the SignalR connection
+- `start()`: Start the real-time connection
+- `stop()`: Stop the real-time connection
 - `invoke(method, ...args)`: Invoke a server method and wait for response
 - `send(method, ...args)`: Send a message to server without waiting for response
 - `onMessage(event, handler)`: Register message handler
@@ -109,7 +109,7 @@ High-level service for chat functionality.
 
 #### Constructor Options
 
-- `baseUrl`: Base URL for the SignalR hub (optional, defaults to current origin)
+- `baseUrl`: Base URL for the real-time hub (optional, defaults to current origin)
 - `hubPath`: Hub path (optional, defaults to '/hub/llm_chat')
 - All SignalRService options except `hubUrl`
 
