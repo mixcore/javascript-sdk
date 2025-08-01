@@ -1,0 +1,32 @@
+{
+  "name": "@mixcore/signalr",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "description": "SignalR real-time communication services for Mixcore SDK",
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist",
+    "test": "jest",
+    "lint": "eslint src --ext .ts --config ../../eslint.config.js"
+  },
+  "dependencies": {
+    "@mixcore/base": "workspace:*",
+    "@mixcore/shared": "workspace:*",
+    "@microsoft/signalr": "^9.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": "https://github.com/mixcore/javascript-sdk",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": ["mixcore", "sdk", "signalr", "realtime", "chat", "typescript"],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
