@@ -35,6 +35,13 @@ export class PostRestMvcService extends BaseRestService {
     throw new Error('DELETE method not implemented');
   }
 
+  async put<T = any>(endpoint: string = this.endpoint, data: any): Promise<T> {
+    if (typeof this.config.put === 'function') {
+      return this.config.put(endpoint, data);
+    }
+    throw new Error('PUT method not implemented');
+  }
+
   handleError(error: any): void {
     if (typeof this.config.handleError === 'function') {
       this.config.handleError(error);

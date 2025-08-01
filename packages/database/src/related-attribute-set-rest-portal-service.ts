@@ -45,6 +45,16 @@ export class RelatedAttributeSetRestPortalService extends BaseRestService {
     return { isSucceed: false, errors: ['DELETE method not implemented'] };
   }
 
+  /**
+   * PUT request for related attribute set (returns ApiResult)
+   */
+  async put(endpoint: string = this.endpoint, data: any): Promise<ApiResult> {
+    if (typeof this.config.put === 'function') {
+      return this.config.put(endpoint, data);
+    }
+    return { isSucceed: false, errors: ['PUT method not implemented'] };
+  }
+
   handleError(error: any): void {
     if (typeof this.config.handleError === 'function') {
       this.config.handleError(error);

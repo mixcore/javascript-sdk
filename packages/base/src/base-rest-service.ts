@@ -1,4 +1,3 @@
-
 import { BaseService, BaseServiceConfig } from './base-service';
 import type { ApiResult } from '@mixcore/api';
 
@@ -34,4 +33,11 @@ export abstract class BaseRestService extends BaseService {
    * @param endpoint - API endpoint
    */
   abstract delete(endpoint: string): Promise<ApiResult>;
+
+  /**
+   * Abstract method for PUT requests (returns ApiResult)
+   * @param endpoint - API endpoint
+   * @param data - Data to put
+   */
+  abstract put(endpoint: string, data: any): Promise<ApiResult>;
 }

@@ -1,4 +1,3 @@
-
 /**
  * BaseService
  * Abstract base class for Mixcore SDK services
@@ -18,6 +17,26 @@ export abstract class BaseService {
 
   constructor(config: BaseServiceConfig) {
     this.config = config;
+  }
+
+  /**
+   * Returns the current configuration.
+   */
+  getConfig(): BaseServiceConfig {
+    return this.config;
+  }
+
+  /**
+   * Executes a function with error handling.
+   * @param fn - Function to execute
+   */
+  protected async execute<T>(fn: () => Promise<T>): Promise<T> {
+    try {
+      return await fn();
+    } catch (error) {
+      this.handleError(error);
+      throw error;
+    }
   }
 
   /**
