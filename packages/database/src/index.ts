@@ -9,3 +9,5 @@ export * from './related-attribute-data-rest-form-service';
 export * from './related-attribute-data-rest-portal-service';
 export * from './related-attribute-set-rest-portal-service';
 export * from './module-data-services';
+
+export * from './mix-db-client';
