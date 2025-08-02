@@ -1,6 +1,22 @@
 import { MixDatabaseRestPortalService } from './mix-database-rest-portal-service';
 import { MixDatabaseDataRestPortalService } from './mix-database-data-rest-portal-service';
 import type { ApiService, ApiResult } from '@mixcore/api';
+import type {
+  MixQuery,
+  TableInfo,
+  TableSchema,
+  ColumnDefinition,
+  IndexDefinition,
+  RelationshipDefinition,
+  RecordData,
+  QueryResult,
+  DatabaseStats,
+  CreateTableRequest,
+  UpdateTableRequest,
+  QueryOptions,
+  FilterCondition,
+  DatabaseOperationResult
+} from './types';
 
 // Optionally: Define types for params for better DX
 export interface ListDatabasesParams {
