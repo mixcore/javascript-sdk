@@ -17,12 +17,36 @@ export type ApiServiceHook = {
   onResponse?: (res: Response, req: RequestInit & { url: string }) => void | Promise<void>;
 };
 
+export interface ApiServiceConfigWithRefresh extends ApiServiceConfig {
+  onRefreshToken?: () => Promise<string | null>;
+}
+
 export class ApiService implements ApiService {
-  private config: ApiServiceConfig;
+  private config: ApiServiceConfigWithRefresh;
   private hooks: ApiServiceHook[] = [];
 
-  constructor(config: ApiServiceConfig) {
+  constructor(config: ApiServiceConfigWithRefresh) {
     this.config = config;
+  }
+
+  /**
+   * Internal helper to handle 401, refresh token, and retry once
+   */
+  private async handle401AndRetry(
+    req: RequestInit & { url: string },
+    doRequest: () => Promise<Response>,
+    updateHeaders: (token: string) => void
+  ): Promise<Response> {
+    let res = await doRequest();
+    if (res.status === 401 && this.config.onRefreshToken) {
+      const newToken = await this.config.onRefreshToken();
+      if (newToken) {
+        this.config.apiKey = newToken;
+        updateHeaders(newToken);
+        res = await doRequest();
+      }
+    }
+    return res;
   }
 
   /**
@@ -45,8 +69,12 @@ export class ApiService implements ApiService {
       headers: this.config.apiKey ? { 'Authorization': `Bearer ${this.config.apiKey}` } : undefined,
     };
     for (const hook of this.hooks) if (hook.onRequest) await hook.onRequest(req);
+    const updateHeaders = (token: string) => {
+      req.headers = { ...(req.headers || {}), Authorization: `Bearer ${token}` };
+    };
     try {
-      const res = await fetch(req.url, req);
+      const doRequest = () => fetch(req.url, req);
+      const res = await this.handle401AndRetry(req, doRequest, updateHeaders);
       for (const hook of this.hooks) if (hook.onResponse) await hook.onResponse(res, req);
       const data = await res.json().catch(() => undefined);
       if (!res.ok) {
@@ -80,7 +108,11 @@ export class ApiService implements ApiService {
       body,
     };
     for (const hook of this.hooks) if (hook.onRequest) await hook.onRequest(req);
-    const res = await fetch(req.url, req);
+    const updateHeaders = (token: string) => {
+      req.headers = { ...(req.headers || {}), Authorization: `Bearer ${token}` };
+    };
+    const doRequest = () => fetch(req.url, req);
+    const res = await this.handle401AndRetry(req, doRequest, updateHeaders);
     for (const hook of this.hooks) if (hook.onResponse) await hook.onResponse(res, req);
     const respData = await res.json().catch(() => undefined);
     if (!res.ok) {
@@ -100,16 +132,16 @@ export class ApiService implements ApiService {
       headers: this.config.apiKey ? { 'Authorization': `Bearer ${this.config.apiKey}` } : undefined,
     };
     for (const hook of this.hooks) if (hook.onRequest) await hook.onRequest(req);
-    try {
-      const res = await fetch(req.url, req);
-      for (const hook of this.hooks) if (hook.onResponse) await hook.onResponse(res, req);
-      const data = await res.json().catch(() => undefined);
-      if (!res.ok) {
-        return { isSucceed: false, data, errors: [res.statusText], status: res.status };
-      }
-      return { isSucceed: true, data, status: res.status };
-    } catch (err) {
-      return { isSucceed: false, errors: [(err as Error).message] };
+    const updateHeaders = (token: string) => {
+      req.headers = { ...(req.headers || {}), Authorization: `Bearer ${token}` };
+    };
+    const doRequest = () => fetch(req.url, req);
+    const res = await this.handle401AndRetry(req, doRequest, updateHeaders);
+    for (const hook of this.hooks) if (hook.onResponse) await hook.onResponse(res, req);
+    const data = await res.json().catch(() => undefined);
+    if (!res.ok) {
+      return { isSucceed: false, data, errors: [res.statusText], status: res.status };
     }
+    return { isSucceed: true, data, status: res.status };
   }
 }
