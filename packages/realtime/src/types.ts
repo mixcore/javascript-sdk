@@ -13,6 +13,33 @@ export interface SignalRMessage {
   createdDateTime: string;
 }
 
+export interface StreamingMessage {
+  type: number;
+  target: string;
+  arguments: StreamingMessageArgument[];
+  invocationId?: string;
+  result?: any;
+}
+
+export interface StreamingMessageArgument {
+  action: string;
+  data: {
+    isSuccess: boolean;
+    response: string;
+    result: string;
+  };
+  type: string;
+}
+
+export interface StreamingChatState {
+  isStreaming: boolean;
+  currentMessage: string;
+  messageId?: string;
+}
+
+export type StreamingMessageHandler = (chunk: string, isComplete: boolean) => void;
+export type StreamingStateHandler = (state: StreamingChatState) => void;
+
 export interface SignalRConfig {
   hubUrl: string;
   accessTokenFactory: () => string | null;
