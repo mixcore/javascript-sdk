@@ -65,6 +65,8 @@ const sdk = createMixcoreSdk(
 
 ## API Reference
 
+All public APIs include comprehensive TSDoc/JSDoc documentation and auto-generated TypeScript declarations.
+
 ### ApiService Methods
 
 | Method | Parameters | Returns | Description |

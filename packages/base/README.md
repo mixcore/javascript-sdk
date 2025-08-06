@@ -46,6 +46,8 @@ class MyService extends BaseService {
 
 ## API Reference
 
+All base classes and interfaces include comprehensive TSDoc/JSDoc documentation and auto-generated TypeScript declarations.
+
 ### BaseService Methods
 
 | Method | Parameters | Returns | Description |
