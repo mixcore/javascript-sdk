@@ -39,24 +39,91 @@ export class ChatService {
   }
 
   private handleIncomingMessage(message: SignalRMessage): void {
-    console.log('Raw incoming message:', message);
+    console.log('🔍 Raw incoming message:', message);
+    console.log('🔍 Message keys:', Object.keys(message || {}));
+    console.log('🔍 Message action:', message?.action);
+    console.log('🔍 Message data keys:', Object.keys(message?.data || {}));
     
-    // Check if the message itself is streaming format
+    // Check if this is a streaming format message
     if (this.isStreamingMessage(message)) {
-      console.log('Detected streaming message');
+      console.log('✅ Detected as streaming format message');
       this.handleStreamingMessage(message);
       return;
     }
     
-    // Handle as regular message only if not currently streaming
+    // Handle based on action like AngularJS code
+    if (message?.action) {
+      console.log('🎯 Processing action-based message:', message.action);
+      switch (message.action) {
+        case "NewMessage":
+          this.handleNewMessage(message);
+          break;
+        case "NewStreamingMessage":
+          this.handleNewStreamingMessage(message);
+          break;
+        default:
+          console.log('⚠️ Unknown action:', message.action);
+      }
+    } else {
+      console.log('📄 Processing as regular message (no action)');
+      // Fallback for regular SignalR messages
+      this.handleRegularMessage(message);
+    }
+  }
+  
+  private handleNewMessage(message: SignalRMessage): void {
+    console.log('📤 Handling NewMessage:', message);
+    console.log('🔍 Current streaming state:', this.streamingState.isStreaming);
+    
+    if (this.streamingState.isStreaming) {
+      console.log('🏁 NewMessage received during streaming - treating as completion signal');
+      // Use NewMessage as the completion trigger for streaming
+      this.completeStreaming();
+      return;
+    }
+    
+    if (message?.data?.response) {
+      console.log('✅ Processing NewMessage as regular message (no streaming was active)');
+      // Reset streaming data and add final message (like AngularJS)
+      this.streamingState.isStreaming = false;
+      this.streamingState.currentMessage = '';
+      this.notifyStreamingStateChange();
+      
+      // Emit as regular message
+      this.emitRegularMessage({
+        id: Date.now().toString(),
+        content: message.data.response,
+        role: "assistant" as const,
+        timestamp: new Date().toISOString(),
+      });
+    }
+  }
+  
+  private handleNewStreamingMessage(message: SignalRMessage): void {
+    console.log('🌊 Handling NewStreamingMessage:', message);
+    
+    if (message?.data?.response) {
+      console.log('✅ Found response data:', message.data.response);
+      // Accumulate streaming content (like AngularJS)
+      this.appendStreamingChunk(message.data.response);
+    } else {
+      console.log('❌ No response data found in streaming message');
+    }
+  }
+  
+  private handleRegularMessage(message: SignalRMessage): void {
+    console.log('📄 Handling regular message - this bypasses streaming');
+    console.log('📄 Streaming state:', this.streamingState.isStreaming);
+    
+    // Only process if not currently streaming
     if (!this.streamingState.isStreaming && message?.data?.response) {
-      console.log('Processing as regular message');
+      console.log('✅ Processing regular message response:', message.data.response);
       
       let content = '';
       if (typeof message.data.response === 'string') {
         content = message.data.response;
+        console.log('📝 String content:', content);
       } else if (typeof message.data.response === 'object' && message.data.response !== null) {
-        // Handle complex SignalR response structures
         const responseObj = message.data.response as any;
         if (responseObj.content) {
           content = responseObj.content;
@@ -65,30 +132,37 @@ export class ChatService {
         } else if (responseObj.message) {
           content = responseObj.message;
         } else {
-          // Fallback - try to extract meaningful text from the object
           content = JSON.stringify(message.data.response, null, 2);
         }
+        console.log('📝 Object content extracted:', content);
       } else {
         content = String(message.data.response);
+        console.log('📝 Converted content:', content);
       }
       
-      // Only add if we have actual content and it's not streaming format
       if (content.trim() && !content.includes('"type":1') && !content.includes('"type":3')) {
-        // Emit as regular message for the UI to handle
+        console.log('🚀 Emitting regular message with content:', content);
         this.emitRegularMessage({
           id: Date.now().toString(),
           content: content,
           role: "assistant" as const,
           timestamp: new Date().toISOString(),
         });
+      } else {
+        console.log('❌ Content filtered out or contains streaming markers');
       }
     } else {
-      console.log('Message ignored - either streaming active or no response content');
+      console.log('❌ Regular message skipped - streaming active or no response');
     }
   }
 
   private isStreamingMessage(message: any): boolean {
-    // Check direct streaming format
+    // Check for action-based pattern (like AngularJS)
+    if (message?.action === 'NewStreamingMessage') {
+      return true;
+    }
+    
+    // Check direct streaming format (type 1/3 pattern)
     if (typeof message === 'object' && 
         typeof message.type === 'number' && 
         typeof message.target === 'string' && 
@@ -101,7 +175,8 @@ export class ChatService {
       // Check if response contains streaming JSON pattern
       const response = message.data.response;
       return response.includes('"type":1') && response.includes('"target":"receive_message"') ||
-             response.includes('"type":3');
+             response.includes('"type":3') ||
+             response.includes('"action":"NewStreamingMessage"');
     }
     
     return false;
@@ -172,17 +247,22 @@ export class ChatService {
   }
 
   private appendStreamingChunk(chunk: string): void {
+    console.log('📝 Appending streaming chunk:', chunk);
+    
     if (!this.streamingState.isStreaming) {
+      console.log('🚀 Starting new stream');
       this.streamingState.isStreaming = true;
       this.streamingState.currentMessage = '';
       this.notifyStreamingStateChange();
     }
 
     this.streamingState.currentMessage += chunk;
+    console.log('📄 Current streaming message:', this.streamingState.currentMessage);
     
     // Notify streaming handlers
     this.streamingHandlers.forEach(handler => {
       try {
+        console.log('🔔 Calling streaming handler with chunk:', chunk);
         handler(chunk, false);
       } catch (error) {
         console.error('Error in streaming handler:', error);
@@ -191,24 +271,31 @@ export class ChatService {
   }
 
   private completeStreaming(): void {
+    console.log('🏁 Completing streaming...');
+    console.log('📄 Final streaming content:', this.streamingState.currentMessage);
+    
     if (this.streamingState.isStreaming) {
-      // Notify completion
+      // Notify completion to UI handlers first
+      console.log('📢 Notifying streaming handlers of completion');
       this.streamingHandlers.forEach(handler => {
         try {
-          handler('', true);
+          handler('', true); // Empty chunk with isComplete = true
         } catch (error) {
           console.error('Error in streaming completion handler:', error);
         }
       });
 
       // Reset streaming state
+      console.log('🔄 Resetting streaming state');
       this.streamingState.isStreaming = false;
       const finalMessage = this.streamingState.currentMessage;
       this.streamingState.currentMessage = '';
       
       this.notifyStreamingStateChange();
       
-      console.log('Streaming completed. Final message:', finalMessage);
+      console.log('✅ Streaming completed. Final message length:', finalMessage.length);
+    } else {
+      console.log('⚠️ completeStreaming called but streaming was not active');
     }
   }
 
@@ -278,7 +365,9 @@ export class ChatService {
   }
 
   public onStreaming(handler: StreamingMessageHandler): void {
+    console.log('📋 Registering streaming handler. Current handlers:', this.streamingHandlers.length);
     this.streamingHandlers.push(handler);
+    console.log('📋 After registration, total handlers:', this.streamingHandlers.length);
   }
 
   public offStreaming(handler: StreamingMessageHandler): void {
