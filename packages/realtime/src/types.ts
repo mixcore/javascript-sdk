@@ -7,6 +7,7 @@ export interface SignalRMessage {
   type: string;
   data: {
     isSuccess: boolean;
+    role: string;
     response: string;
     result: string;
   };
@@ -23,6 +24,7 @@ export interface StreamingMessage {
 
 export interface StreamingMessageArgument {
   action: string;
+  role: string;
   data: {
     isSuccess: boolean;
     response: string;

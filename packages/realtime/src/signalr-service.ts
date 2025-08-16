@@ -90,6 +90,7 @@ export class SignalRService {
         isSuccess: parsedMsg.data?.isSuccess ?? false,
         response: parsedMsg.data?.response ?? '',
         result: parsedMsg.data?.result ?? '',
+        role: parsedMsg.data?.role ?? '',
       },
       createdDateTime: parsedMsg.createdDateTime ?? new Date().toISOString(),
     };
