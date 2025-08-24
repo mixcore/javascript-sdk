@@ -12,6 +12,7 @@ Modular, framework-agnostic SDK for Mixcore projects. Built with TypeScript and 
 - **Production-ready**: Well-tested and documented
 - **Secure by design**: Configuration injection prevents hardcoded secrets
 - **Extensible**: Plugin/adapter architecture for custom implementations
+- **Fully typed**: All public APIs include TSDoc/JSDoc comments and auto-generated TypeScript declarations
 
 ## Packages
 
@@ -62,6 +63,8 @@ const data = await sdk.database.fetchDataItems('module-id');
 - Use environment variables for sensitive values
 
 ## API Reference
+
+All public APIs are documented with TSDoc/JSDoc comments and include auto-generated TypeScript declarations. Type definitions are available for all methods, interfaces, and configuration options.
 
 ### Core SDK Methods
 
